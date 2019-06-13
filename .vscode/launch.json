@@ -8,7 +8,7 @@
             "name": "Rodar Arquivo Atual",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/../bin/${fileBasenameNoExtension}",
+            "program": "${fileDirName}/../bin/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

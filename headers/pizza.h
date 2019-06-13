@@ -27,4 +27,4 @@ Pizza *pizzaRead(FILE *in);
 int pizzaCmp(Pizza *p1, Pizza *p2);
 
 // Retorna tamanho do registro que representa a pizza em bytes
-int pizzaSize();
+int pizzaSize(void);

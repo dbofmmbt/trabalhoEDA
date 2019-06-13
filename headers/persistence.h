@@ -1,3 +1,7 @@
 #include <utils.h>
+#include <info_model.h>
 
-/* TODO everything */
+Node * loadNode(long pos);
+void storeNode(Node *);
+
+saveData(void *info);

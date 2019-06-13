@@ -65,7 +65,7 @@ int pizzaCmp(Pizza *p1, Pizza *p2)
 	return 1;
 }
 
-int pizzaSize()
+int pizzaSize(void)
 {
 	return sizeof(int) +	   // id
 		   sizeof(char) * 50 + // name
