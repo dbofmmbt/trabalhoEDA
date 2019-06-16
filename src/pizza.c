@@ -73,8 +73,8 @@ int pizzaSize(void)
 	return sizeof(int) +	   // id
 		   sizeof(char) * 50 + // name
 		   sizeof(char) * 20 + // categoria
-		   sizeof(float);	  // preço
-	sizeof(int);			   // proximoElementoCategoria
+		   sizeof(float) +	 // preço
+		   sizeof(int);		   // proximoElementoCategoria
 }
 
 char *pizzaCategory(Pizza *p)

@@ -3,3 +3,4 @@
 main
 .ipch
 *.ipch
+bin/main

@@ -7,9 +7,7 @@ struct internalNode
     bool isPointingToLeaf;
 };
 
-Node *internalNodeCreate(int t)
-{
-}
+Node *internalNodeCreate(int t);
 static void *_internalNodeSearch(void *this, int id);
 static Node *_internalNodeInsert(void *this, void *info);
 static Node *_internalNodeRemove(void *this, int id);
