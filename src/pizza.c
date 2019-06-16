@@ -15,6 +15,7 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 	strcpy(p->name, name);
 	strcpy(p->category, category);
 	p->price = price;
+	p->nextCategoryElement = -1;
 	return p;
 }
 
@@ -24,6 +25,7 @@ void pizzaSave(Pizza *p, FILE *out)
 	fwrite(p->name, sizeof(char), sizeof(p->name), out);
 	fwrite(p->category, sizeof(char), sizeof(p->category), out);
 	fwrite(&p->price, sizeof(float), 1, out);
+	fwrite(&p->nextCategoryElement, sizeof(int), 1, out);
 }
 
 Pizza *pizzaRead(FILE *in)
@@ -37,6 +39,7 @@ Pizza *pizzaRead(FILE *in)
 	fread(p->name, sizeof(char), sizeof(p->name), in);
 	fread(p->category, sizeof(char), sizeof(p->category), in);
 	fread(&p->price, sizeof(float), 1, in);
+	fread(&p->nextCategoryElement, sizeof(int), 1, in);
 	return p;
 }
 
@@ -71,4 +74,20 @@ int pizzaSize(void)
 		   sizeof(char) * 50 + // name
 		   sizeof(char) * 20 + // categoria
 		   sizeof(float);	  // preço
+	sizeof(int);			   // proximoElementoCategoria
+}
+
+char *pizzaCategory(Pizza *p)
+{
+	return p->category;
+}
+
+int getNextCategoryPosition(Pizza *p)
+{
+	return p->nextCategoryElement;
+}
+
+void setNextCategoryPosition(Pizza *p, int position)
+{
+	p->nextCategoryElement = position;
 }

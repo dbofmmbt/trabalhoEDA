@@ -1,3 +1,5 @@
+#include <utils.h>
+
 typedef struct node
 {
     void *(*nodeSearch)(void *this, int id);

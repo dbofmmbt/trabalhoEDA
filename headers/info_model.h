@@ -7,5 +7,10 @@ typedef struct infoModel
     void *(*infoLoader)(FILE *file);
     /* The size of the record in Secondary Memory */
     int (*infoSize)(void);
+    
+    char *(*getSecIndex)(void *info);
 
+    int (*getNextSecIndexPosition)(void *info);
+
+    void (*setNextSecIndexPosition)(void *info, int position);
 } InfoModel;

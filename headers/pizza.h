@@ -6,7 +6,10 @@ typedef struct pizza
 	char name[50];
 	char category[20];
 	float price;
+	int nextCategoryElement;
 } Pizza;
+
+/* When nextCategoryElement is -1, it means that there's no next element */
 
 // Imprime pizza
 void pizzaPrint(Pizza *p);
@@ -28,3 +31,9 @@ int pizzaCmp(Pizza *p1, Pizza *p2);
 
 // Retorna tamanho do registro que representa a pizza em bytes
 int pizzaSize(void);
+
+char *pizzaCategory(Pizza *p);
+
+int getNextCategoryPosition(Pizza *p);
+
+void setNextCategoryPosition(Pizza *p, int position);
