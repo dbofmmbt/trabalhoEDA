@@ -2,9 +2,9 @@
 #include <info_model.h>
 #include <node.h>
 
-#define SEC_INDEX_FILE_NAME "sec_index.bin"
-#define MAIN_INDEX_FILE_NAME "main_index.bin"
-#define METADATA_FILE_NAME "metadata.bin"
+#define SEC_INDEX_FILE_PATH "data/sec_index.bin"
+#define MAIN_INDEX_FILE_PATH "data/main_index.bin"
+#define METADATA_FILE_PATH "data/metadata.bin"
 
 int ramificationDegree;
 

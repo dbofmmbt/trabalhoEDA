@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pizza.h>
-#include <store.h>
+#include <storage.h>
 #include <info_view.h>
 
 InfoModel mainModel = {
