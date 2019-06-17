@@ -6,7 +6,7 @@
 #define MAIN_INDEX_FILE_PATH "data/main_index.bin"
 #define METADATA_FILE_PATH "data/metadata.bin"
 
-int ramificationDegree;
+int ramificationFactor;
 
 void setupStore(char *pizzasFile, int degree);
 
