@@ -6,7 +6,9 @@
 #define MAIN_INDEX_FILE_NAME "main_index.bin"
 #define METADATA_FILE_NAME "metadata.bin"
 
-void setupStore(char *pizzasFile, int treeDegree);
+int ramificationDegree;
+
+void setupStore(char *pizzasFile, int degree);
 
 Node *loadRoot(void);
 

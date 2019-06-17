@@ -4,3 +4,5 @@ main
 .ipch
 *.ipch
 bin/main
+.bin/*
+bin/*
