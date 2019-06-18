@@ -42,10 +42,43 @@ void insertOnTree(void *info);
 
 void *removeFromTree(int id);
 
-bool updateOnTree(void *info);
+bool updateOnTree(void *info)
+{
+    //recebe um ponteiro pra informação na MP
+    int infoId = mainModel.getId(info);
+    if (!infoId)
+    {
+        return false;
+    }
+    //usa o geID do info manager e consegue o id do cara na arvore
+    int infoAddress = getInfoAdressFromNode(infoId);
+    if (infoAddress == -1)
+    {
+        return false;
+    }
+    //usa o getInfoAddress com esse ID para conseguir o endereço da info no arquivo
 
-void *getFromTree(int id);
+    FILE *leafFile = fopen(DATA_FILE_PATH, "wb");
+    if (!leafFile)
+    {
+        return false;
+    }
+    fseek(leafFile, infoAddress, SEEK_SET);
+    fwrite(info, mainModel.infoSize(), 1, leafFile);
+    fclose(leafFile);
+    return true;
+    //substituir a informação antiga no arquivo pela nova (com excessão do ID)
+}
 
+Address getInfoAdressFromNode(int ID)
+{
+    //recebe um ID e retorna o endereço dele no arquivo
+}
+
+void *getFromTree(int id)
+{
+    //search a node by his ID , load the node to the MP and return the pointer to where it is
+}
 void *getAllFromTree(void);
 
 Node *loadRoot(void);
