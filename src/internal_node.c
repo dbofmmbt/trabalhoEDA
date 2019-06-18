@@ -23,7 +23,10 @@ Node *internalNodeCreate()
     newNode->nodeLenght = _internalNodeLenght;
     newNode->nodeSizeInBytes = _internalNodeSizeInBytes;
 }
-static void *_internalNodeSearch(void *this, int id);
+static void *_internalNodeSearch(void *this, int id){
+    //tenta achar um ID em um nó interno
+
+};
 static Node *_internalNodeInsert(void *this, void *info);
 static Node *_internalNodeRemove(void *this, int id);
 static Node *_internalNodeGet(void *this, int i);
