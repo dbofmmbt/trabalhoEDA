@@ -3,6 +3,8 @@
 struct leafNode
 {
     Node;
+    void *info;
+    struct leafNode *nextLeafNode;
 };
 
 Node *leafNodeCreate(int t);
