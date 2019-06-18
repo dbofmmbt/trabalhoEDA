@@ -8,12 +8,12 @@
 
 int ramificationFactor;
 
-void setupStore(char *pizzasFile, int degree);
+void insertOnTree(void *info);
 
-Node *loadRoot(void);
+void *removeFromTree(int id);
 
-Node *loadNode(long pos);
+void updateOnTree(int id, void *info);
 
-void storeNode(Node *);
+void *getFromTree(int id);
 
-saveData(void *info);
+void *getAllFromTree(void);
