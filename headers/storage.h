@@ -12,7 +12,7 @@ void insertOnTree(void *info);
 
 void *removeFromTree(int id);
 
-void updateOnTree(int id, void *info);
+bool updateOnTree(void *info);
 
 void *getFromTree(int id);
 
