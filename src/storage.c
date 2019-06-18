@@ -1,19 +1,60 @@
-#include <storage.h>
 #include <unistd.h>
+#include <metadata.h>
+#include <info_model.h>
+#include <storage.h>
+#include <leaf_node.h>
 
-void setupStore(char *pizzasFile, int degree)
+extern int ramificationFactor;
+extern Metadata *meta;
+extern InfoModel mainModel;
+
+void setupStorage(char *catalogName, int degree)
 {
-    extern int ramificationFactor;
-    if (access(METADATA_FILE_PATH, F_OK)) // If it exists, there's no need to setup the Store.
-        return;
     ramificationFactor = degree;
-    
+    if (access(METADATA_FILE_PATH, F_OK)) // If it exists, there's no need to setup the Store.
+    {
+        loadMetadata();
+        return;
+    }
+    meta = initMetadata(degree);
+    storeMetadata();
+
+    // Initializing empty files
+    FILE *internalFile, *leafFile;
+    internalFile = fopen(MAIN_INDEX_FILE_PATH, "wb");
+    leafFile = fopen(DATA_FILE_PATH, "wb");
+    fclose(internalFile);
+    fclose(leafFile);
+
+    Node *root = leafNodeCreate(degree);
+    leafNodeStore(root, -1);
+
+    FILE *catalog = fopen(catalogName, "rb");
+    if (!catalog)
+        return;
+    void *info;
+    while (info = mainModel.infoLoader(catalog))
+        insertOnTree(info);
+    fclose(catalog);
 }
 
+void insertOnTree(void *info);
+
+void *removeFromTree(int id);
+
+bool updateOnTree(void *info);
+
+void *getFromTree(int id);
+
+void *getAllFromTree(void);
+
 Node *loadRoot(void);
+
+/*
+    ! loadNode and storeNode will possibly be deleted.
+    ! They may be changed for internal and leaf functions.
+*/
 
 Node *loadNode(long pos);
 
 void storeNode(Node *);
-
-saveData(void *info);
