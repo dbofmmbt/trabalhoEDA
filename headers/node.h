@@ -2,6 +2,8 @@
 
 typedef struct node
 {
+    int numberKeys;
+
     void *(*nodeSearch)(void *this, int id);
 
     struct node *(*nodeInsert)(void *this, void *info);
