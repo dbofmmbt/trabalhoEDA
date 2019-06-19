@@ -9,7 +9,7 @@
 
 int ramificationFactor;
 
-void setupStore(char *pizzasFile, int degree);
+void setupStorage(char *catalogName, int degree);
 
 void insertOnTree(void *info);
 
