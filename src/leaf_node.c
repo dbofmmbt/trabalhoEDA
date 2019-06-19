@@ -15,7 +15,7 @@ Node *leafNodeCreate(int t);
 
 int leafNodeStore(void *node, int pos)
 {
-    LeafNode ln = (LeafNode *)node;
+    LeafNode *ln = (LeafNode *)node;
     FILE *f = fopen(DATA_FILE_PATH, "rb+");
     if (pos < 0)
     {

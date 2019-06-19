@@ -1,8 +1,14 @@
 *.bin
 .bin
 main
+bin/main
 .ipch
 *.ipch
 bin/main
 .bin/*
 bin/*
+bin
+o
+.o
+.s
+s
