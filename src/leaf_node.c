@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <leaf_node.h>
 #include <storage.h>
 #include <info_model.h>
@@ -11,7 +12,7 @@ struct leafNode
     int prox;
 };
 
-Node *leafNodeCreate(int t);
+Node *leafNodeCreate(int t) {}
 
 int leafNodeStore(void *node, int pos)
 {
@@ -27,7 +28,7 @@ int leafNodeStore(void *node, int pos)
     for (int i = 0; i < ln->numberKeys; i++)
     {
         void *info = ln->nodeGet(ln, i);
-        mainModel->infoSaver(info, f);
+        mainModel.infoSaver(info, f);
     }
     fwrite(&ln->prox, sizeof(int), 1, f);
     fclose(f);

@@ -1,5 +1,8 @@
 #include <utils.h>
 
+#ifndef NODE
+#define NODE
+
 typedef struct node
 {
     int numberKeys;
@@ -17,3 +20,5 @@ typedef struct node
     int (*nodeSizeInBytes)(void *this);
 
 } Node;
+
+#endif

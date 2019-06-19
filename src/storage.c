@@ -20,20 +20,20 @@ void setupStorage(char *catalogName, int degree)
     storeMetadata();
 
     // Initializing empty files
-    FILE *internalFile, leafFile;
+    FILE *internalFile, *leafFile;
     internalFile = fopen(MAIN_INDEX_FILE_PATH, "wb");
     leafFile = fopen(DATA_FILE_PATH, "wb");
     fclose(internalFile);
     fclose(leafFile);
 
     Node *root = leafNodeCreate(degree);
-    leafNodeStore(root);
+    leafNodeStore(root, -1);
 
     FILE *catalog = fopen(catalogName, "rb");
     if (!catalog)
         return;
     void *info;
-    while (info = mainModel->infoLoader(catalog))
+    while (info = mainModel.infoLoader(catalog))
         insertOnTree(info);
     fclose(catalog);
 }

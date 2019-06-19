@@ -1,5 +1,5 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
         "pizza.h": "c",
         "info_saver.h": "c",
@@ -7,6 +7,9 @@
         "node.h": "c",
         "storage.h": "c",
         "unistd.h": "c",
-        "metadata.h": "c"
-    }
+        "metadata.h": "c",
+        "info_model.h": "c"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "C_Cpp.default.compilerPath": "usr/bin/gcc -fms-extensions",
 }

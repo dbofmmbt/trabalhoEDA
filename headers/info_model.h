@@ -1,3 +1,6 @@
+#ifndef INFO_MODEL
+#define INFO_MODEL
+
 /* The Model is responsible for the data abstraction */
 typedef struct infoModel
 {
@@ -7,10 +10,12 @@ typedef struct infoModel
     void *(*infoLoader)(FILE *file);
     /* The size of the record in Secondary Memory */
     int (*infoSize)(void);
-    
+
     char *(*getSecIndex)(void *info);
 
     int (*getNextSecIndexPosition)(void *info);
 
     void (*setNextSecIndexPosition)(void *info, int position);
 } InfoModel;
+
+#endif
