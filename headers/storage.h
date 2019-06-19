@@ -8,6 +8,8 @@
 
 int ramificationFactor;
 
+void setupStore(char *pizzasFile, int degree);
+
 void insertOnTree(void *info);
 
 void *removeFromTree(int id);

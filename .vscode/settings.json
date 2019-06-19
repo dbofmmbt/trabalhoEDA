@@ -6,6 +6,7 @@
         "internal_node.h": "c",
         "node.h": "c",
         "storage.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "metadata.h": "c"
     }
 }
