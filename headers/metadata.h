@@ -3,7 +3,7 @@
 typedef struct metadata
 {
     bool rootIsLeaf;
-    int rootPosition, idCounter, ramificationFactor;
+    int rootPosition, idCounter, ramificationFactor, quantityInfos, treeHeight;
 
 } Metadata;
 
@@ -12,3 +12,6 @@ Metadata *meta;
 void storeMetadata(void);
 void loadMetadata(void);
 Metadata *initMetadata(int ramificationFactor);
+
+/* When isInsertion is true, it increments info quantity. When it's false, the quantity is decremented.  */
+void quantityInfosUpdate(bool isInsertion);
