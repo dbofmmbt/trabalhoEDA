@@ -35,6 +35,7 @@ int leafNodeStore(void *node, int pos)
     return pos;
 }
 
+/* These functions are used to set the function pointers on Create */
 static void *_leafNodeSearch(void *this, int id);
 static Node *_leafNodeInsert(void *this, void *info);
 static Node *_leafNodeRemove(void *this, int id);

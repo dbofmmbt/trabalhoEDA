@@ -7,16 +7,16 @@
 #define DATA_FILE_PATH "data/data.bin"
 #define METADATA_FILE_PATH "data/metadata.bin"
 
-int ramificationFactor;
+int ramificationFactor; // ? Does it make sense to keep it on metadata?
 
 void setupStorage(char *catalogName, int degree);
 
-void insertOnTree(void *info);
+void insertOnTree(void *info); // TODO
 
-void *removeFromTree(int id);
+void *removeFromTree(int id); // TODO
 
-bool updateOnTree(void *info);
+bool updateOnTree(void *info); // TODO
 
-void *getFromTree(int id);
+void *getFromTree(int id); // TODO
 
-void *getAllFromTree(void);
+void *getAllFromTree(void); // TODO

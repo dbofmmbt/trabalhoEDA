@@ -6,6 +6,6 @@
     * Related: A info that belongs to a specific Element
 */
 
-void *getAllRelated(char *element);
+void *getAllRelated(char *element); // TODO
 
-void deleteAllRelated(char *element);
+void deleteAllRelated(char *element); // TODO
