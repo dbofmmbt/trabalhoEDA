@@ -13,6 +13,13 @@ struct leafNode
     int prox;
 };
 
+/* These functions are used to set the function pointers on Create */
+static void *_leafNodeSearch(void *this, int id);
+static Node *_leafNodeInsert(void *this, void *info);
+static Node *_leafNodeRemove(void *this, int id);
+static Node *_leafNodeGet(void *this, int i);
+// TODO: add the other functions declared on node.h
+
 Node *leafNodeCreate(int t)
 {
     LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
@@ -40,19 +47,26 @@ int leafNodeStore(void *node, int pos)
     }
     else
         fseek(f, pos, SEEK_SET);
-    for (int i = 0; i < ln->numberKeys; i++)
+
+    fwrite(&ln->numberKeys, sizeof(int), 1, f);
+
+    int i;
+    for (i = 0; i < ln->numberKeys; i++)
     {
         void *info = ln->nodeGet(ln, i);
         mainModel.infoSaver(info, f);
     }
+    
+    int maxNumberKeys = ramificationFactor * 2 - 1;
+    fwrite("0", sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
+
     fwrite(&ln->prox, sizeof(int), 1, f);
     fclose(f);
     return pos;
 }
 
-/* These functions are used to set the function pointers on Create */
-static void *_leafNodeSearch(void *this, int id);
-static Node *_leafNodeInsert(void *this, void *info);
-static Node *_leafNodeRemove(void *this, int id);
-static Node *_leafNodeGet(void *this, int i);
-// TODO: add the other functions declared on node.h
+Node *leafNodeLoad(int pos)
+{
+    LeafNode *leaf = leafNodeCreate(ramificationFactor);
+    FILE *f = fopen(DATA_FILE_PATH, "rb");
+}
