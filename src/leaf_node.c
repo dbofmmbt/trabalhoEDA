@@ -3,6 +3,7 @@
 #include <storage.h>
 #include <info_model.h>
 
+extern int ramificationFactor;
 extern InfoModel mainModel;
 
 struct leafNode
@@ -12,7 +13,21 @@ struct leafNode
     int prox;
 };
 
-Node *leafNodeCreate(int t) {}
+Node *leafNodeCreate(int t)
+{
+    LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
+
+    leaf->nodeSearch = _leafNodeSearch;
+    leaf->nodeInsert = _leafNodeInsert;
+    leaf->nodeRemove = _leafNodeRemove;
+    leaf->nodeGet = _leafNodeGet;
+
+    leaf->numberKeys = 0;
+    leaf->info = malloc(sizeof(void *) * ramificationFactor * 2 - 1);
+    int prox = -1;
+
+    return leaf;
+}
 
 int leafNodeStore(void *node, int pos)
 {
@@ -39,3 +54,5 @@ int leafNodeStore(void *node, int pos)
 static void *_leafNodeSearch(void *this, int id);
 static Node *_leafNodeInsert(void *this, void *info);
 static Node *_leafNodeRemove(void *this, int id);
+static Node *_leafNodeGet(void *this, int i);
+// TODO: add the other functions declared on node.h
