@@ -50,6 +50,11 @@ void *getAllFromTree(void);
 
 Node *loadRoot(void);
 
+/*
+    ! loadNode and storeNode will possibly be deleted.
+    ! They may be changed for internal and leaf functions.
+*/
+
 Node *loadNode(long pos);
 
 void storeNode(Node *);
