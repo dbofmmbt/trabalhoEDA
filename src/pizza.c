@@ -77,6 +77,14 @@ int pizzaSize(void)
 		   sizeof(int);		   // proximoElementoCategoria
 }
 
+int pizzaGetId(Pizza *p){
+	return p->id;
+}
+
+void setId(Pizza *p, int id){
+	p->id = id;
+}
+
 char *pizzaCategory(Pizza *p)
 {
 	return p->category;

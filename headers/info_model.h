@@ -11,6 +11,10 @@ typedef struct infoModel
     /* The size of the record in Secondary Memory */
     int (*infoSize)(void);
 
+    int (*getId)(void *info);
+
+    int (*setId)(void *info, int id);
+
     char *(*getSecIndex)(void *info);
 
     int (*getNextSecIndexPosition)(void *info);
