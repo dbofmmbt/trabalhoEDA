@@ -42,3 +42,10 @@ void quantityInfosUpdate(bool isInsertion)
     meta->treeHeight = log(meta->quantityInfos) / log(ramificationFactor);
     storeMetadata();
 }
+
+int getNewId(void)
+{
+    int id = ++meta->idCounter;
+    storeMetadata();
+    return id;
+}
