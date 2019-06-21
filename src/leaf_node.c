@@ -10,7 +10,7 @@ struct leafNode
 {
     Node;
     void *info;
-    int prox;
+    Address prox;
 };
 
 /* These functions are used to set the function pointers on Create */
@@ -31,12 +31,12 @@ Node *leafNodeCreate(int t)
 
     leaf->numberKeys = 0;
     leaf->info = malloc(sizeof(void *) * ramificationFactor * 2 - 1);
-    int prox = -1;
+    leaf->prox = -1;
 
     return leaf;
 }
 
-int leafNodeStore(void *node, int pos)
+Address leafNodeStore(void *node, Address pos)
 {
     LeafNode *ln = (LeafNode *)node;
     FILE *f = fopen(DATA_FILE_PATH, "rb+");
@@ -56,7 +56,7 @@ int leafNodeStore(void *node, int pos)
         void *info = ln->nodeGet(ln, i);
         mainModel.infoSaver(info, f);
     }
-    
+
     int maxNumberKeys = ramificationFactor * 2 - 1;
     fwrite("0", sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
 
@@ -65,7 +65,7 @@ int leafNodeStore(void *node, int pos)
     return pos;
 }
 
-Node *leafNodeLoad(int pos)
+Node *leafNodeLoad(Address pos)
 {
     LeafNode *leaf = leafNodeCreate(ramificationFactor);
     FILE *f = fopen(DATA_FILE_PATH, "rb");
