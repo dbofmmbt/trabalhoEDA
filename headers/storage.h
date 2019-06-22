@@ -1,6 +1,7 @@
 #include <utils.h>
 #include <info_model.h>
-#include <node.h>
+#include <leaf_node.h>
+#include <internal_node.h>
 
 #define SEC_INDEX_FILE_PATH "data/sec_index.bin"
 #define MAIN_INDEX_FILE_PATH "data/main_index.bin"

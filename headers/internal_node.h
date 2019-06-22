@@ -1,5 +1,5 @@
-#include <node.h>
+#include <utils.h>
 
 typedef struct internalNode InternalNode;
 
-Node * internalNodeCreate(int t);
+InternalNode * internalNodeCreate(int t);

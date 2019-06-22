@@ -8,26 +8,14 @@ extern InfoModel mainModel;
 
 struct leafNode
 {
-    Node;
-    void *info;
+    int numberKeys;
+    void **info;
     Address prox;
 };
 
-/* These functions are used to set the function pointers on Create */
-static void *_leafNodeSearch(void *this, int id);
-static Node *_leafNodeInsert(void *this, void *info);
-static Node *_leafNodeRemove(void *this, int id);
-static Node *_leafNodeGet(void *this, int i);
-// TODO: add the other functions declared on node.h
-
-Node *leafNodeCreate(int t)
+LeafNode *leafNodeCreate(int t)
 {
     LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
-
-    leaf->nodeSearch = _leafNodeSearch;
-    leaf->nodeInsert = _leafNodeInsert;
-    leaf->nodeRemove = _leafNodeRemove;
-    leaf->nodeGet = _leafNodeGet;
 
     leaf->numberKeys = 0;
     leaf->info = malloc(sizeof(void *) * ramificationFactor * 2 - 1);
@@ -36,7 +24,7 @@ Node *leafNodeCreate(int t)
     return leaf;
 }
 
-Address leafNodeStore(void *node, Address pos)
+Address leafNodeStore(LeafNode *node, Address pos)
 {
     LeafNode *ln = (LeafNode *)node;
     FILE *f = fopen(DATA_FILE_PATH, "rb+");
@@ -53,7 +41,7 @@ Address leafNodeStore(void *node, Address pos)
     int i;
     for (i = 0; i < ln->numberKeys; i++)
     {
-        void *info = ln->nodeGet(ln, i);
+        void *info = ln->info[i];
         mainModel.infoSaver(info, f);
     }
 
@@ -65,7 +53,7 @@ Address leafNodeStore(void *node, Address pos)
     return pos;
 }
 
-Node *leafNodeLoad(Address pos)
+LeafNode *leafNodeLoad(Address pos)
 {
     LeafNode *leaf = leafNodeCreate(ramificationFactor);
     FILE *f = fopen(DATA_FILE_PATH, "rb");

@@ -26,7 +26,7 @@ void setupStorage(char *catalogName, int degree)
     fclose(internalFile);
     fclose(leafFile);
 
-    Node *root = leafNodeCreate(degree);
+    LeafNode *root = leafNodeCreate(degree);
     leafNodeStore(root, -1);
 
     FILE *catalog = fopen(catalogName, "rb");
@@ -81,13 +81,8 @@ void *getFromTree(int id)
 }
 void *getAllFromTree(void);
 
-Node *loadRoot(void);
-
 /*
-    ! loadNode and storeNode will possibly be deleted.
-    ! They may be changed for internal and leaf functions.
-*/
-
-Node *loadNode(long pos);
-
-void storeNode(Node *);
+    The Root node could be a leaf or an internal node. The user of this function
+    will have to cast it correctly by checking the meta information about the root.
+ */
+void *loadRoot(void);
