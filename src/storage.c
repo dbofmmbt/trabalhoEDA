@@ -1,8 +1,5 @@
 #include <unistd.h>
-#include <metadata.h>
-#include <info_model.h>
 #include <storage.h>
-#include <leaf_node.h>
 
 extern int ramificationFactor;
 extern Metadata *meta;
