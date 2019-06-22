@@ -68,7 +68,15 @@ LeafNode *leafNodeLoad(Address pos)
     fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberKeys), SEEK_CUR);
 
     fread(leaf->prox, sizeof(Address), 1, f);
-    
+
     fclose(f);
     return leaf;
+}
+
+void LeafNodeFree(LeafNode *node)
+{
+    for (int i = 0; i < node->numberKeys; i++)
+        mainModel.infoFree(node->info[i]);
+    free(node->info);
+    free(node);
 }

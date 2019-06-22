@@ -8,3 +8,5 @@ LeafNode *leafNodeCreate(int t);
 Address leafNodeStore(LeafNode *node, Address pos);
 
 LeafNode *leafNodeLoad(Address pos);
+
+void LeafNodeFree(LeafNode *node);
