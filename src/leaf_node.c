@@ -57,4 +57,26 @@ LeafNode *leafNodeLoad(Address pos)
 {
     LeafNode *leaf = leafNodeCreate(ramificationFactor);
     FILE *f = fopen(DATA_FILE_PATH, "rb");
+    fseek(f, pos, SEEK_SET);
+
+    fread(&leaf->numberKeys, sizeof(int), 1, f);
+
+    for (int i = 0; i < leaf->numberKeys; i++)
+        leaf->info[i] = mainModel.infoLoader(f);
+
+    int maxNumberKeys = ramificationFactor * 2 - 1;
+    fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberKeys), SEEK_CUR);
+
+    fread(leaf->prox, sizeof(Address), 1, f);
+
+    fclose(f);
+    return leaf;
+}
+
+void LeafNodeFree(LeafNode *node)
+{
+    for (int i = 0; i < node->numberKeys; i++)
+        mainModel.infoFree(node->info[i]);
+    free(node->info);
+    free(node);
 }

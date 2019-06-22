@@ -73,15 +73,22 @@ int pizzaSize(void)
 	return sizeof(int) +	   // id
 		   sizeof(char) * 50 + // name
 		   sizeof(char) * 20 + // categoria
-		   sizeof(float) +	   // preço
+		   sizeof(float) +	 // preço
 		   sizeof(int);		   // proximoElementoCategoria
 }
 
-int pizzaGetId(Pizza *p){
+void pizzaFree(Pizza *p)
+{
+	free(p);
+}
+
+int pizzaGetId(Pizza *p)
+{
 	return p->id;
 }
 
-void setId(Pizza *p, int id){
+void setId(Pizza *p, int id)
+{
 	p->id = id;
 }
 

@@ -9,6 +9,7 @@ InfoModel mainModel = {
     pizzaSave,
     pizzaRead,
     pizzaSize,
+    pizzaFree,
     pizzaGetId,
     pizzaSetId,
     pizzaCategory,
