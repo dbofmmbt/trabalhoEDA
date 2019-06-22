@@ -1,4 +1,5 @@
 #include <utils.h>
+#include <metadata.h>
 #include <info_model.h>
 #include <leaf_node.h>
 #include <internal_node.h>
