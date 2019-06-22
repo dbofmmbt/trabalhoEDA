@@ -19,6 +19,7 @@ InfoModel mainModel = {
 
 InfoView mainView = {
     pizzaPrint,
+    pizzaName
 };
 
 int main(int argc, char const *argv[])

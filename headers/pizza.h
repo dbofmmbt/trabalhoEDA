@@ -43,3 +43,5 @@ char *pizzaCategory(Pizza *p);
 int getNextCategoryPosition(Pizza *p);
 
 void setNextCategoryPosition(Pizza *p, int position);
+
+char *pizzaName(bool plural);

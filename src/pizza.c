@@ -106,3 +106,11 @@ void setNextCategoryPosition(Pizza *p, int position)
 {
 	p->nextCategoryElement = position;
 }
+
+char *pizzaName(bool plural)
+{
+	if (plural)
+		return "pizzas";
+	else
+		return "pizza";
+}
