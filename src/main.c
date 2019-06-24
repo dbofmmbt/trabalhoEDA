@@ -9,6 +9,9 @@ InfoModel mainModel = {
     pizzaSave,
     pizzaRead,
     pizzaSize,
+    pizzaFree,
+    pizzaGetId,
+    pizzaSetId,
     pizzaCategory,
     getNextCategoryPosition,
     setNextCategoryPosition
@@ -16,6 +19,7 @@ InfoModel mainModel = {
 
 InfoView mainView = {
     pizzaPrint,
+    pizzaName
 };
 
 int main(int argc, char const *argv[])

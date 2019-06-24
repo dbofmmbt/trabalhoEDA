@@ -77,6 +77,21 @@ int pizzaSize(void)
 		   sizeof(int);		   // proximoElementoCategoria
 }
 
+void pizzaFree(Pizza *p)
+{
+	free(p);
+}
+
+int pizzaGetId(Pizza *p)
+{
+	return p->id;
+}
+
+void setId(Pizza *p, int id)
+{
+	p->id = id;
+}
+
 char *pizzaCategory(Pizza *p)
 {
 	return p->category;
@@ -90,4 +105,12 @@ int getNextCategoryPosition(Pizza *p)
 void setNextCategoryPosition(Pizza *p, int position)
 {
 	p->nextCategoryElement = position;
+}
+
+char *pizzaName(bool plural)
+{
+	if (plural)
+		return "pizzas";
+	else
+		return "pizza";
 }

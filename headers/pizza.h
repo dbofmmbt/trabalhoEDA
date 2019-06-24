@@ -32,8 +32,16 @@ int pizzaCmp(Pizza *p1, Pizza *p2);
 // Retorna tamanho do registro que representa a pizza em bytes
 int pizzaSize(void);
 
+void pizzaFree(Pizza *p);
+
+int pizzaGetId(Pizza *p);
+
+void pizzaSetId(Pizza *p, int id);
+
 char *pizzaCategory(Pizza *p);
 
 int getNextCategoryPosition(Pizza *p);
 
 void setNextCategoryPosition(Pizza *p, int position);
+
+char *pizzaName(bool plural);
