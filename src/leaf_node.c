@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <leaf_node.h>
-#include <storage.h>
 #include <info_model.h>
 
 extern int ramificationFactor;
@@ -8,7 +7,7 @@ extern InfoModel mainModel;
 
 struct leafNode
 {
-    int numberKeys;
+    int numberOfKeys;
     void **info;
     Address prox;
 };
@@ -17,7 +16,7 @@ LeafNode *leafNodeCreate(int t)
 {
     LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
 
-    leaf->numberKeys = 0;
+    leaf->numberOfKeys = 0;
     leaf->info = malloc(sizeof(void *) * ramificationFactor * 2 - 1);
     leaf->prox = -1;
 
@@ -26,7 +25,6 @@ LeafNode *leafNodeCreate(int t)
 
 Address leafNodeStore(LeafNode *node, Address pos)
 {
-    LeafNode *ln = (LeafNode *)node;
     FILE *f = fopen(DATA_FILE_PATH, "rb+");
     if (pos < 0)
     {
@@ -36,19 +34,19 @@ Address leafNodeStore(LeafNode *node, Address pos)
     else
         fseek(f, pos, SEEK_SET);
 
-    fwrite(&ln->numberKeys, sizeof(int), 1, f);
+    fwrite(&node->numberOfKeys, sizeof(int), 1, f);
 
     int i;
-    for (i = 0; i < ln->numberKeys; i++)
+    for (i = 0; i < node->numberOfKeys; i++)
     {
-        void *info = ln->info[i];
+        void *info = node->info[i];
         mainModel.infoSaver(info, f);
     }
 
     int maxNumberKeys = ramificationFactor * 2 - 1;
     fwrite("0", sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
 
-    fwrite(&ln->prox, sizeof(int), 1, f);
+    fwrite(&node->prox, sizeof(int), 1, f);
     fclose(f);
     return pos;
 }
@@ -59,13 +57,13 @@ LeafNode *leafNodeLoad(Address pos)
     FILE *f = fopen(DATA_FILE_PATH, "rb");
     fseek(f, pos, SEEK_SET);
 
-    fread(&leaf->numberKeys, sizeof(int), 1, f);
+    fread(&leaf->numberOfKeys, sizeof(int), 1, f);
 
-    for (int i = 0; i < leaf->numberKeys; i++)
+    for (int i = 0; i < leaf->numberOfKeys; i++)
         leaf->info[i] = mainModel.infoLoader(f);
 
     int maxNumberKeys = ramificationFactor * 2 - 1;
-    fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberKeys), SEEK_CUR);
+    fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberOfKeys), SEEK_CUR);
 
     fread(leaf->prox, sizeof(Address), 1, f);
 
@@ -75,7 +73,7 @@ LeafNode *leafNodeLoad(Address pos)
 
 void LeafNodeFree(LeafNode *node)
 {
-    for (int i = 0; i < node->numberKeys; i++)
+    for (int i = 0; i < node->numberOfKeys; i++)
         mainModel.infoFree(node->info[i]);
     free(node->info);
     free(node);
