@@ -83,3 +83,13 @@ void *getAllFromTree(void);
     will have to cast it correctly by checking the meta information about the root.
  */
 void *loadRoot(void);
+
+/*
+    Used by insertion and remotion functions in order to perform rotations when it's necessary.
+
+    It will rotate the tree in the process, if needed.
+*/
+Address getPossibleFatherAddress(int id);
+
+/* Used by search and update functions to get or change an information. */
+Address getPossibleLeafAddress(int id);
