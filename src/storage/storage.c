@@ -48,7 +48,7 @@ bool updateOnTree(void *info)
         return false;
     }
     //usa o getId do info manager e consegue o id do cara na arvore
-    int infoAddress = getInfoAddressFromNode(infoId);
+    int infoAddress = getInfoAddress(infoId);
     if (infoAddress == -1)
     {
         return false;
@@ -67,7 +67,7 @@ bool updateOnTree(void *info)
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
 }
 
-Address getInfoAddressFromNode(int ID)
+Address getInfoAddress(int ID)
 {
     //recebe um ID e retorna o endereço dele no arquivo
 }
