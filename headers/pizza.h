@@ -1,13 +1,6 @@
 #include <utils.h>
 
-typedef struct pizza
-{
-	int id;
-	char name[50];
-	char category[20];
-	float price;
-	int nextCategoryElement;
-} Pizza;
+typedef struct pizza Pizza;
 
 /* When nextCategoryElement is -1, it means that there's no next element */
 

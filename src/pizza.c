@@ -1,6 +1,15 @@
 #include <utils.h>
 #include <pizza.h>
 
+struct pizza
+{
+	int id;
+	char name[50];
+	char category[20];
+	float price;
+	int nextCategoryElement;
+};
+
 void pizzaPrint(Pizza *p)
 {
 	printf("%d, %s (%s), R$ %.2f\n", p->id, p->name, p->category, p->price);
