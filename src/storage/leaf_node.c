@@ -64,10 +64,16 @@ LeafNode *leafNodeLoad(Address pos)
     return leaf;
 }
 
-void LeafNodeFree(LeafNode *node)
+void leafNodeFree(LeafNode *node)
 {
     for (int i = 0; i < node->numberOfKeys; i++)
         mainModel.infoFree(node->info[i]);
     free(node->info);
     free(node);
+}
+
+Address leafNodeInfoAddress(Address nodeAddress, int index)
+{
+    int numberOfKeysSize = sizeof(int);
+    return nodeAddress + numberOfKeysSize + index * mainModel.infoSize();
 }

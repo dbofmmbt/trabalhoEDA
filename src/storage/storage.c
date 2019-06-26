@@ -67,8 +67,19 @@ bool updateOnTree(void *info)
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
 }
 
-Address getInfoAddress(int ID) // TODO
+Address getInfoAddress(int id)
 {
+    Address leafAddress = getPossibleLeafAddress(id);
+    LeafNode *leaf = leafNodeLoad(leafAddress);
+    int i;
+    for (i = 0; i < leaf->numberOfKeys; i++)
+        if (mainModel.getId(leaf->info[i]) == id)
+            break;
+    if (i == leaf->numberOfKeys)
+        return -1;
+    Address infoAddress = leafNodeInfoAddress(leafAddress, i);
+    leafNodeFree(leaf);
+    return infoAddress;
     //recebe um ID e retorna o endereço dele no arquivo
 }
 

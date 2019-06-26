@@ -17,6 +17,8 @@ Address leafNodeStore(LeafNode *node, Address pos);
 
 LeafNode *leafNodeLoad(Address pos);
 
-void LeafNodeFree(LeafNode *node);
+void leafNodeFree(LeafNode *node);
+
+Address leafNodeInfoAddress(Address nodeAddress, int index);
 
 #endif
