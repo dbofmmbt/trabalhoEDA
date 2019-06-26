@@ -29,7 +29,6 @@ Metadata *initMetadata(int ramificationFactor)
     m->rootIsLeaf = false;
     m->rootPosition = 0;
     m->quantityInfos = 0;
-    m->treeHeight = 0;
     return m;
 }
 
@@ -39,7 +38,6 @@ void quantityInfosUpdate(bool isInsertion)
         meta->quantityInfos++;
     else // It is remotion
         meta->quantityInfos--;
-    meta->treeHeight = log(meta->quantityInfos) / log(ramificationFactor);
     storeMetadata();
 }
 
