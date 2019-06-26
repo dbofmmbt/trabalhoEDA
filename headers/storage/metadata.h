@@ -1,3 +1,6 @@
+#ifndef METADATA
+#define METADATA
+
 #include <utils.h>
 
 typedef struct metadata
@@ -18,3 +21,5 @@ void quantityInfosUpdate(bool isInsertion);
 
 /* Use it to get an ID for a new record */
 int getNewId(void);
+
+#endif

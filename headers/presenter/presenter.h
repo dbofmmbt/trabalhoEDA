@@ -1,3 +1,6 @@
+#ifndef PRESENTER
+#define PRESENTER
+
 #include <utils.h>
 
 /* It returns a integer based on the user input */
@@ -6,3 +9,5 @@ int showMenu(void);
 
 /* It uses the InfoPrint from mainView */
 void showInfo(void);
+
+#endif

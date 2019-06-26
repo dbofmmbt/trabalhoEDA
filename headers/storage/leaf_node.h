@@ -1,3 +1,6 @@
+#ifndef LEAF_NODE
+#define LEAF_NODE
+
 #include <utils.h>
 
 typedef struct leafNode
@@ -15,3 +18,5 @@ Address leafNodeStore(LeafNode *node, Address pos);
 LeafNode *leafNodeLoad(Address pos);
 
 void LeafNodeFree(LeafNode *node);
+
+#endif
