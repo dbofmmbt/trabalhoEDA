@@ -35,9 +35,9 @@ void setupStorage(char *catalogName, int degree)
     fclose(catalog);
 }
 
-void insertOnTree(void *info);
+void insertOnTree(void *info); // TODO
 
-void *removeFromTree(int id);
+void *removeFromTree(int id); // TODO
 
 bool updateOnTree(void *info)
 {
@@ -67,29 +67,30 @@ bool updateOnTree(void *info)
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
 }
 
-Address getInfoAddress(int ID)
+Address getInfoAddress(int ID) // TODO
 {
     //recebe um ID e retorna o endereço dele no arquivo
 }
 
-void *getFromTree(int id)
+void *getFromTree(int id) // TODO
 {
     //search a node by his ID , load the node to the MP and return the pointer to where it is
 }
-void *getAllFromTree(void);
+
+void *getAllFromTree(void); // TODO
 
 /*
     The Root node could be a leaf or an internal node. The user of this function
     will have to cast it correctly by checking the meta information about the root.
  */
-void *loadRoot(void);
+void *loadRoot(void); // TODO
 
 /*
     Used by insertion and remotion functions in order to perform rotations when it's necessary.
 
     It will rotate the tree in the process, if needed.
 */
-Address getPossibleFatherAddress(int id);
+Address getPossibleFatherAddress(int id); // TODO
 
 /* Used by search and update functions to get or change an information. */
-Address getPossibleLeafAddress(int id);
+Address getPossibleLeafAddress(int id); // TODO

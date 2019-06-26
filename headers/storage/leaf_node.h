@@ -1,6 +1,11 @@
 #include <utils.h>
 
-typedef struct leafNode LeafNode;
+typedef struct leafNode
+{
+    int numberOfKeys;
+    void **info;
+    Address prox;
+} LeafNode;
 
 LeafNode *leafNodeCreate(int t);
 
@@ -12,3 +17,5 @@ LeafNode *leafNodeLoad(Address pos);
 void LeafNodeFree(LeafNode *node);
 
 void leafNodeDivision(Address father, int sonPosition);
+
+void *leafNodeSearch(int id);

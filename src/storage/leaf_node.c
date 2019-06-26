@@ -5,13 +5,6 @@
 extern int ramificationFactor;
 extern InfoModel mainModel;
 
-struct leafNode
-{
-    int numberOfKeys;
-    void **info;
-    Address prox;
-};
-
 LeafNode *leafNodeCreate(int t)
 {
     LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
