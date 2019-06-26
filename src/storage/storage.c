@@ -83,7 +83,17 @@ void *getAllFromTree(void); // TODO
     The Root node could be a leaf or an internal node. The user of this function
     will have to cast it correctly by checking the meta information about the root.
  */
-void *loadRoot(void); // TODO
+void *loadRoot(void)
+{
+    void *root;
+    Address rootAddress = meta->rootPosition;
+    
+    if (meta->rootIsLeaf)
+        root = leafNodeLoad(rootAddress);
+    else
+        root = internalNodeLoad(rootAddress);
+    return root;
+}
 
 /*
     Used by insertion and remotion functions in order to perform rotations when it's necessary.
