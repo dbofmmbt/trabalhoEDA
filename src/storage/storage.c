@@ -87,7 +87,7 @@ void *loadRoot(void)
 {
     void *root;
     Address rootAddress = meta->rootPosition;
-    
+
     if (meta->rootIsLeaf)
         root = leafNodeLoad(rootAddress);
     else
@@ -100,7 +100,24 @@ void *loadRoot(void)
 
     It will rotate the tree in the process, if needed.
 */
-Address getPossibleFatherAddress(int id); // TODO
+Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotations while going through the Tree.
+{
+    if (meta->rootIsLeaf)
+        return -1;
+    InternalNode *currentNode = loadRoot();
+    Address nodeAddress = meta->rootPosition;
+    while (!currentNode->isPointingToLeaf)
+    {
+        int i = 0;
+        while (i < currentNode->numberOfKeys && currentNode->IDs[i] < id)
+            i++;
+        InternalNode *aux = currentNode;
+        nodeAddress = currentNode->children[i];
+        currentNode = internalNodeLoad(nodeAddress);
+        internalNodeFree(aux);
+    }
+    return nodeAddress;
+}
 
 /* Used by search and update functions to get or change an information. */
 Address getPossibleLeafAddress(int id); // TODO
