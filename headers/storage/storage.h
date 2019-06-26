@@ -3,6 +3,7 @@
 #include <info_model.h>
 #include <leaf_node.h>
 #include <internal_node.h>
+#include <rotations.h>
 
 int ramificationFactor; // ? Does it make sense to keep it on metadata?
 

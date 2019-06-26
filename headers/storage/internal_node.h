@@ -20,5 +20,3 @@ InternalNode *internalNodeLoad(Address nodePosition);
 
 //libera um nó na MP
 void internalNodeFree(InternalNode *node);
-
-void internalNodeDivision(Address father, int sonPosition);
