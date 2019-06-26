@@ -2,7 +2,7 @@
 #define INTERNAL_NODE
 
 #include <utils.h>
-#include <info_model.h>
+#include <interfaces/info_model.h>
 
 typedef struct IN
 {

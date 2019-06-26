@@ -96,7 +96,7 @@ int pizzaGetId(Pizza *p)
 	return p->id;
 }
 
-void setId(Pizza *p, int id)
+void pizzaSetId(Pizza *p, int id)
 {
 	p->id = id;
 }

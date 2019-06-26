@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pizza.h>
-#include <storage.h>
-#include <info_view.h>
+#include <storage/storage.h>
+#include <interfaces/info_view.h>
+#include <interfaces/info_model.h>
 
 InfoModel mainModel = {
     pizzaSave,
@@ -24,5 +25,6 @@ InfoView mainView = {
 
 int main(int argc, char const *argv[])
 {
+    printf("Teste\n");
     return 0;
 }
