@@ -6,7 +6,7 @@
 typedef struct metadata
 {
     bool rootIsLeaf;
-    int rootPosition, idCounter, ramificationFactor, quantityInfos, treeHeight;
+    int rootPosition, idCounter, ramificationFactor, quantityInfos;
 
 } Metadata;
 
