@@ -120,4 +120,14 @@ Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotation
 }
 
 /* Used by search and update functions to get or change an information. */
-Address getPossibleLeafAddress(int id); // TODO
+Address getPossibleLeafAddress(int id) // TODO: it needs to check for rotations.
+{
+    Address fatherAddress = getPossibleFatherAddress(id);
+    InternalNode *father = internalNodeLoad(fatherAddress);
+    int i = 0;
+    while (i < father->numberOfKeys && father->IDs[i] < id)
+        i++;
+    Address leafAddress = father->children[i];
+    internalNodeFree(father);
+    return leafAddress;
+}
