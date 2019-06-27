@@ -88,7 +88,10 @@ void *getFromTree(int id) // TODO
     //search a node by his ID , load the node to the MP and return the pointer to where it is
 }
 
-void *getAllFromTree(void); // TODO
+void *getAllFromTree(void)
+{
+    return NULL;
+}
 
 /*
     The Root node could be a leaf or an internal node. The user of this function

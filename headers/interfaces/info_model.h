@@ -15,7 +15,7 @@ typedef struct infoModel
 
     int (*getId)(void *info);
 
-    int (*setId)(void *info, int id);
+    void (*setId)(void *info, int id);
 
     void *(*getSecIndex)(void *info);
 
