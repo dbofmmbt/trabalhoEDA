@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pizza.h>
-#include <storage/storage.h>
-#include <interfaces/info_view.h>
-#include <interfaces/info_model.h>
+#include <storage.h>
+#include <info_view.h>
+#include <info_model.h>
 #include <presenter.h>
 
 #define UNUSED_PARAMETER(x) ((void)x)
@@ -28,6 +28,8 @@ InfoView mainView = {
 
 int main(int argc, char const *argv[])
 {
+    UNUSED_PARAMETER(argc);
+    UNUSED_PARAMETER(argv);
     int menuAnswer;
     UNUSED_PARAMETER(argc);
     UNUSED_PARAMETER(argv);
