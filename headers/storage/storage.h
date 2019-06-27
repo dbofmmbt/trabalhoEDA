@@ -1,3 +1,6 @@
+#ifndef STORAGE
+#define STORAGE
+
 #include <utils.h>
 #include <metadata.h>
 #include <info_model.h>
@@ -17,3 +20,5 @@ bool updateOnTree(void *info); // TODO
 void *getFromTree(int id); // TODO
 
 void *getAllFromTree(void); // TODO
+
+#endif

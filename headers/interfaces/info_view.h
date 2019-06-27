@@ -1,3 +1,6 @@
+#ifndef INFO_VIEW
+#define INFO_VIEW
+
 /* The View is responsible for the visualization abstraction */
 typedef struct infoView
 {
@@ -6,3 +9,5 @@ typedef struct infoView
 
     char *(*infoName)(bool plural);
 } InfoView;
+
+#endif

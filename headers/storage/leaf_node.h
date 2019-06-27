@@ -1,3 +1,6 @@
+#ifndef LEAF_NODE
+#define LEAF_NODE
+
 #include <utils.h>
 
 typedef struct leafNode
@@ -19,3 +22,5 @@ void LeafNodeFree(LeafNode *node);
 void leafNodeDivision(Address father, int sonPosition);
 
 void *leafNodeSearch(int id);
+
+#endif

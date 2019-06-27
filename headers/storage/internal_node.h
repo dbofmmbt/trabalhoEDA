@@ -1,3 +1,6 @@
+#ifndef INTERNAL_NODE
+#define INTERNAL_NODE
+
 #include <utils.h>
 #include <info_model.h>
 
@@ -22,3 +25,5 @@ InternalNode *internalNodeLoad(Address nodePosition);
 void internalNodeFree(InternalNode *node);
 
 void internalNodeDivision(Address father, int sonPosition);
+
+#endif

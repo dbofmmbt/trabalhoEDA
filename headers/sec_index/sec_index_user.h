@@ -1,3 +1,6 @@
+#ifndef SEC_INDEX_USER
+#define SEC_INDEX_USER
+
 #include <utils.h>
 #include <info_model.h>
 
@@ -9,3 +12,5 @@
 void *getAllRelated(char *element); // TODO
 
 void deleteAllRelated(char *element); // TODO
+
+#endif

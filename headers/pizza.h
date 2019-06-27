@@ -1,3 +1,6 @@
+#ifndef PIZZA
+#define PIZZA
+
 #include <utils.h>
 
 typedef struct pizza Pizza;
@@ -38,3 +41,5 @@ int getNextCategoryPosition(Pizza *p);
 void setNextCategoryPosition(Pizza *p, int position);
 
 char *pizzaName(bool plural);
+
+#endif
