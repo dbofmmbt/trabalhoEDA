@@ -131,14 +131,60 @@ Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotation
 }
 
 /* Used by search and update functions to get or change an information. */
-Address getPossibleLeafAddress(int id) // TODO: it needs to check for rotations.
+Address getPossibleLeafAddress(int id)
 {
     Address fatherAddress = getPossibleFatherAddress(id);
-    InternalNode *father = internalNodeLoad(fatherAddress);
-    int i = 0;
-    while (i < father->numberOfKeys && father->IDs[i] < id)
-        i++;
-    Address leafAddress = father->children[i];
-    internalNodeFree(father);
+    Address leafAddress = -1;
+    bool shouldFixTree = true;
+    do
+    {
+        InternalNode *father = internalNodeLoad(fatherAddress);
+        int i = 0;
+        while (i < father->numberOfKeys && father->IDs[i] < id)
+            i++;
+        leafAddress = father->children[i];
+
+        LeafNode *leaf = leafNodeLoad(leafAddress);
+        if (leaf->numberOfKeys == 2 * ramificationFactor)
+        {
+            leafNodeFree(leaf);
+            leafNodeFree(father);
+            leafNodeDivision(fatherAddress, i);
+        }
+        else if (leaf->numberOfKeys == ramificationFactor - 1)
+        {
+            bool operated = false;
+
+            if (i < father->numberOfKeys - 1)
+            {
+                LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= ramificationFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(rightBrother);
+            }
+            if (i > 0 && !operated)
+            {
+                LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= ramificationFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
+        }
+        else // Happens when no division nor operation was necessary.
+        {
+            shouldFixTree = false;
+        }
+        internalNodeFree(father);
+        leafNodeFree(leaf);
+    } while (shouldFixTree);
+
     return leafAddress;
 }
