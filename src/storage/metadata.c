@@ -21,15 +21,14 @@ void loadMetadata(void)
     fclose(f);
 }
 
-Metadata *initMetadata(int ramificationFactor)
+Metadata *initMetadata(int branchingFactor)
 {
     Metadata *m = (Metadata *)malloc(sizeof(Metadata));
     m->idCounter = 0;
-    m->ramificationFactor = ramificationFactor;
+    m->branchingFactor = branchingFactor;
     m->rootIsLeaf = false;
     m->rootPosition = 0;
     m->quantityInfos = 0;
-    m->treeHeight = 0;
     return m;
 }
 
@@ -39,7 +38,6 @@ void quantityInfosUpdate(bool isInsertion)
         meta->quantityInfos++;
     else // It is remotion
         meta->quantityInfos--;
-    meta->treeHeight = log(meta->quantityInfos) / log(ramificationFactor);
     storeMetadata();
 }
 

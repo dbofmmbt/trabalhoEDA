@@ -10,8 +10,9 @@ struct pizza
 	int nextCategoryElement;
 };
 
-void pizzaPrint(Pizza *p)
+void pizzaPrint(void *v)
 {
+	Pizza *p = (Pizza *)v;
 	printf("%d, %s (%s), R$ %.2f\n", p->id, p->name, p->category, p->price);
 }
 
@@ -28,8 +29,9 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 	return p;
 }
 
-void pizzaSave(Pizza *p, FILE *out)
+void pizzaSave(void *v, FILE *out)
 {
+	Pizza *p = (Pizza *)v;
 	fwrite(&p->id, sizeof(int), 1, out);
 	fwrite(p->name, sizeof(char), sizeof(p->name), out);
 	fwrite(p->category, sizeof(char), sizeof(p->category), out);
@@ -37,7 +39,7 @@ void pizzaSave(Pizza *p, FILE *out)
 	fwrite(&p->nextCategoryElement, sizeof(int), 1, out);
 }
 
-Pizza *pizzaRead(FILE *in)
+void *pizzaRead(FILE *in)
 {
 	Pizza *p = (Pizza *)malloc(sizeof(Pizza));
 	if (0 >= fread(&p->id, sizeof(int), 1, in))
@@ -49,14 +51,14 @@ Pizza *pizzaRead(FILE *in)
 	fread(p->category, sizeof(char), sizeof(p->category), in);
 	fread(&p->price, sizeof(float), 1, in);
 	fread(&p->nextCategoryElement, sizeof(int), 1, in);
-	return p;
+	return (void *)p;
 }
 
 int pizzaCmp(Pizza *p1, Pizza *p2)
 {
-	if (p1 == NULL)
+	if (p1 == NULL || p2 == NULL)
 	{
-		return (p2 == NULL);
+		return (p2 == NULL) && (p1 == NULL);
 	}
 	if (p1->id != p2->id)
 	{
@@ -86,33 +88,38 @@ int pizzaSize(void)
 		   sizeof(int);		   // proximoElementoCategoria
 }
 
-void pizzaFree(Pizza *p)
+void pizzaFree(void *p)
 {
 	free(p);
 }
 
-int pizzaGetId(Pizza *p)
+int pizzaGetId(void *v)
 {
+	Pizza *p = (Pizza *)v;
 	return p->id;
 }
 
-void pizzaSetId(Pizza *p, int id)
+void pizzaSetId(void *v, int id)
 {
+	Pizza *p = (Pizza *)v;
 	p->id = id;
 }
 
-char *pizzaCategory(Pizza *p)
+void *pizzaCategory(void *v)
 {
-	return p->category;
+	Pizza *p = (Pizza *)v;
+	return (void *)(p->category);
 }
 
-int getNextCategoryPosition(Pizza *p)
+int getNextCategoryPosition(void *v)
 {
+	Pizza *p = (Pizza *)v;
 	return p->nextCategoryElement;
 }
 
-void setNextCategoryPosition(Pizza *p, int position)
+void setNextCategoryPosition(void *v, int position)
 {
+	Pizza *p = (Pizza *)v;
 	p->nextCategoryElement = position;
 }
 
