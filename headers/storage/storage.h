@@ -12,7 +12,7 @@ int branchingFactor; // ? Does it make sense to keep it on metadata?
 
 void setupStorage(char *catalogName, int degree);
 
-void insertOnTree(void *info); // TODO
+void insertOnTree(void *info);
 
 void *removeFromTree(int id); // TODO
 

@@ -40,11 +40,106 @@ void setupStorage(char *catalogName, int degree)
     fclose(catalog);
 }
 
-void insertOnTree(void *info) // TODO
+void insertOnTree(void *info)
 {
+    loadMetadata();
     int id = meta->idCounter++;
     mainModel.setId(info, id);
-    Address leafAddress = getPossibleLeafAddress(id);
+
+    if (meta->rootIsLeaf)
+    {
+        LeafNode *root = leafNodeLoad(meta->rootPosition);
+        if (root->numberOfKeys == 2 * branchingFactor - 1)
+        {
+            InternalNode *newRoot = internalNodeCreate();
+            newRoot->isPointingToLeaf = true;
+            newRoot->children[0] = meta->rootPosition;
+            Address newRootAddress = internalNodeStore(newRoot, -1);
+            leafNodeDivision(newRootAddress, 0);
+            meta->rootPosition = newRootAddress;
+            meta->rootIsLeaf = false;
+            storeMetadata();
+            leafNodeFree(root);
+            return insertOnTree(info);
+        }
+        else
+        {
+            int i = 0, j;
+            while (i < root->numberOfKeys && id > mainModel.getId(root->info))
+                i++;
+            for (j = root->numberOfKeys; j > i; j--)
+                root->info[j] = root->info[j - 1];
+            root->info[i] = info;
+            root->numberOfKeys++;
+            leafNodeStore(root, meta->rootPosition);
+            leafNodeFree(root);
+            return;
+        }
+    }
+
+    InternalNode *father = loadRoot();
+    Address fatherAddress = meta->rootPosition;
+
+    while (!father->isPointingToLeaf)
+    {
+        int i = 0;
+        while (i < father->numberOfKeys && father->IDs[i] < id)
+            i++;
+        Address sonAddress = father->children[i];
+        InternalNode *son = internalNodeLoad(sonAddress);
+
+        if (son->numberOfKeys == 2 * branchingFactor - 1)
+        {
+            internalNodeDivision(fatherAddress, i);
+        }
+        else // If the son doesn't need operations, continue the search down the Tree.
+        {
+            internalNodeFree(father);
+            father = son;
+            fatherAddress = sonAddress;
+            continue;
+        }
+        // The son needed operations. Therefore, the father must be accessed again.
+        internalNodeFree(son);
+        internalNodeFree(father);
+        father = internalNodeLoad(fatherAddress);
+    }
+
+    // At this point, we got the right father.
+    bool shouldFixTree = true;
+    LeafNode *leaf;
+    Address leafAddress;
+    do
+    {
+        int i = 0;
+        while (i < father->numberOfKeys && father->IDs[i] < id)
+            i++;
+        leafAddress = father->children[i];
+        leaf = leafNodeLoad(leafAddress);
+        if (leaf->numberOfKeys == 2 * branchingFactor - 1)
+        {
+            leafNodeDivision(fatherAddress, i);
+        }
+        else // Happens when no division was necessary.
+        {
+            internalNodeFree(father);
+            shouldFixTree = false;
+            continue;
+        }
+        internalNodeFree(father);
+        father = internalNodeLoad(fatherAddress);
+    } while (shouldFixTree);
+
+    // At this point, we got the leaf.
+    int i = 0, j;
+    while (i < leaf->numberOfKeys && id > mainModel.getId(leaf->info[i]))
+        i++;
+    for (j = leaf->numberOfKeys; j > i; j--)
+        leaf->info[j] = leaf->info[j - 1];
+    leaf->info[i] = info;
+    leaf->numberOfKeys++;
+    leafNodeStore(leaf,leafAddress);
+    leafNodeFree(leaf);
 
     storeMetadata();
 }
