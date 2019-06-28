@@ -107,7 +107,7 @@ void *forEachInfo(void (*callback)(void *))
 {
     Address currentNodeAddress = getPossibleLeafAddress(1);
     do
-    {   
+    {
         LeafNode *leaf = leafNodeLoad(currentNodeAddress);
         for (int i = 0; i < leaf->numberOfKeys; i++)
         {
@@ -147,6 +147,16 @@ static Address getPossibleFatherAddress(int id) // TODO: it needs to check for r
         return -1;
     InternalNode *currentNode = loadRoot();
     Address nodeAddress = meta->rootPosition;
+
+    if (currentNode->numberOfKeys == 2 * branchingFactor - 1)
+    {
+        InternalNode *newRoot = internalNodeCreate();
+        newRoot->children[0] = nodeAddress;
+        Address newRootAddress = internalNodeStore(newRoot, -1);
+        internalNodeDivision(newRootAddress, 0);
+        meta->rootPosition = newRootAddress;
+    }
+
     while (!currentNode->isPointingToLeaf)
     {
         int i = 0;
@@ -175,7 +185,7 @@ static Address getPossibleLeafAddress(int id)
         leafAddress = father->children[i];
 
         LeafNode *leaf = leafNodeLoad(leafAddress);
-        if (leaf->numberOfKeys == 2 * branchingFactor)
+        if (leaf->numberOfKeys == 2 * branchingFactor - 1)
         {
             leafNodeDivision(fatherAddress, i);
         }
