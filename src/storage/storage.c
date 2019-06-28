@@ -146,7 +146,7 @@ void insertOnTree(void *info)
     storeMetadata();
 }
 
-void *removeFromTree(int id) // TODO
+void *removeFromTree(int id)
 {
     if (meta->rootIsLeaf)
     {

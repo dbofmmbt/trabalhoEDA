@@ -14,7 +14,7 @@ void setupStorage(char *catalogName, int degree);
 
 void insertOnTree(void *info);
 
-void *removeFromTree(int id); // TODO
+void *removeFromTree(int id);
 
 bool updateOnTree(void *info);
 
