@@ -40,7 +40,14 @@ void setupStorage(char *catalogName, int degree)
     fclose(catalog);
 }
 
-void insertOnTree(void *info); // TODO
+void insertOnTree(void *info) // TODO
+{
+    int id = meta->idCounter++;
+    mainModel.setId(info, id);
+    Address leafAddress = getPossibleLeafAddress(id);
+
+    storeMetadata();
+}
 
 void *removeFromTree(int id); // TODO
 
@@ -216,6 +223,24 @@ static Address getPossibleLeafAddress(int id)
 {
     Address fatherAddress = getPossibleFatherAddress(id);
     Address leafAddress = -1;
+
+    if (fatherAddress == -1) // Treating the case where the root is a Leaf.
+    {
+        LeafNode *root = leafNodeLoad(meta->rootPosition);
+        if (root->numberOfKeys == 2 * branchingFactor - 1)
+        {
+            InternalNode *newRoot = internalNodeCreate();
+            newRoot->isPointingToLeaf = true;
+            newRoot->children[0] = meta->rootPosition;
+            Address newRootAddress = internalNodeStore(newRoot, -1);
+            leafNodeDivision(newRootAddress, 0);
+            meta->rootPosition = newRootAddress;
+            meta->rootIsLeaf = false;
+            return getPossibleLeafAddress(id);
+        }
+        return root;
+    }
+
     bool shouldFixTree = true;
     do
     {
