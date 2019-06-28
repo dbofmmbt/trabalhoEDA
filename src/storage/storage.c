@@ -89,7 +89,7 @@ static Address getInfoAddress(int id)
 }
 
 //search a node by his ID , load the node to the MP and return the pointer to where it is
-void *getFromTree(int id) // TODO
+void *getFromTree(int id)
 {
     Address infoAdress = getInfoAddress(id);
     if (infoAdress != -1)
