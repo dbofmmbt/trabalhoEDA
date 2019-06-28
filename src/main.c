@@ -5,7 +5,9 @@
 #include <storage/storage.h>
 #include <interfaces/info_view.h>
 #include <interfaces/info_model.h>
-#include <presenter/presenter.h>
+#include <presenter.h>
+
+#define UNUSED_PARAMETER(x) ((void)x)
 
 InfoModel mainModel = {
     pizzaSave,
@@ -22,20 +24,24 @@ InfoView mainView = {
     pizzaPrint,
     pizzaName,
     showMenu
-    };
+};
 
 int main(int argc, char const *argv[])
 {
     int menuAnswer;
+    UNUSED_PARAMETER(argc);
+    UNUSED_PARAMETER(argv);
     menuAnswer = showMenu();
     while (menuAnswer != 666)
     {
         switch (menuAnswer)
         {
         case 1: //Adicionar pizza
-            Pizza *p;
-            
-            break;
+            {
+                Pizza *p;
+                UNUSED_PARAMETER(p);
+                break;
+            }
         case 3: //Alterar pizza
             
             break;

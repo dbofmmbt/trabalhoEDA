@@ -9,7 +9,7 @@ typedef struct infoView
 
     char *(*infoName)(bool plural);
 
-    int *(*showMenu)(void);
+    int (*showMenu)(void);
 } InfoView;
 
 #endif

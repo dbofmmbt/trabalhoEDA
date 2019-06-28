@@ -1,35 +1,7 @@
-int showMenu(void)
-{
-    int answer;
-    while (1)
-    {
-        printf("#########################\n");
-        printf("#          MENU         #\n");
-        printf("#########################\n");
-        printf("# [1] Adicionar Pizza   #\n");
-        printf("# [2] Remover Pizza     #\n");
-        printf("# [3] Alterar Pizza     #\n");
-        printf("# [4] Buscar Pizza      #\n");
-        printf("# [666] Sair            #\n");
-        printf("#########################\n");
-        printf("R: ");
-        scanf("%d", &answer);
-        if (answer == 1 || answer == 3 || answer == 666)
-        {
-            return answer;
-        }
-        else if (answer == 2 || answer == 4)
-        {
-            answer = showSubMenu(answer);
-            if (answer)
-                return answer;
-        } else {
-            printf("Escolha uma opcao valida no menu.\n");
-        }
-    }
-}
+#include <stdio.h>
+#include <presenter.h>
 
-int showSubMenu(int option)
+static int showSubMenu(int option)
 {
     int answer = 0;
     while (1)
@@ -84,6 +56,39 @@ int showSubMenu(int option)
         }
     }
 }
+
+
+int showMenu(void)
+{
+    int answer;
+    while (1)
+    {
+        printf("#########################\n");
+        printf("#          MENU         #\n");
+        printf("#########################\n");
+        printf("# [1] Adicionar Pizza   #\n");
+        printf("# [2] Remover Pizza     #\n");
+        printf("# [3] Alterar Pizza     #\n");
+        printf("# [4] Buscar Pizza      #\n");
+        printf("# [666] Sair            #\n");
+        printf("#########################\n");
+        printf("R: ");
+        scanf("%d", &answer);
+        if (answer == 1 || answer == 3 || answer == 666)
+        {
+            return answer;
+        }
+        else if (answer == 2 || answer == 4)
+        {
+            answer = showSubMenu(answer);
+            if (answer)
+                return answer;
+        } else {
+            printf("Escolha uma opcao valida no menu.\n");
+        }
+    }
+}
+
 
 void showInfo(void)
 {
