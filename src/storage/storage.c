@@ -142,7 +142,7 @@ static void *loadRoot(void)
 
     It will rotate the tree in the process, if needed.
 */
-static Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotations while going through the Tree.
+static Address getPossibleFatherAddress(int id)
 {
     if (meta->rootIsLeaf)
         return -1;
