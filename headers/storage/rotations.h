@@ -6,6 +6,7 @@
 #include <utils.h>
 #include <storage/leaf_node.h>
 #include <storage/internal_node.h>
+#include <storage/metadata.h>
 
 void leafNodeDivision(Address father, int sonPosition);
 

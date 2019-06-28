@@ -1,6 +1,8 @@
 #include <rotations.h>
 extern int branchingFactor;
 extern InfoModel mainModel;
+extern Metadata *meta;
+
 /*
     There's an explanation about the following operations for b-trees, 3A and 3B, in portuguese:
 
@@ -270,4 +272,50 @@ void operation3A(Address father, int sonPosition)
    internalNodeFree(nodeFather);
 }
 
-void operation3B(Address father, int sonPosition);
+void operation3B(Address father, int sonPosition)
+{
+   InternalNode *nodeFather = internalNodeLoad(father);
+   if (nodeFather->isPointingToLeaf)
+   {
+      leafNodeoperation3B(father, sonPosition);
+   }
+   else
+   {
+      internalNodeoperation3B(father, sonPosition);
+   }
+   internalNodeFree(nodeFather);
+}
+void leafNodeoperation3B(Address father, int sonPosition)
+{
+   InternalNode *nodeFather = NULL;
+   LeafNode *node = NULL;
+   LeafNode *nodeRightBrother = NULL;
+   LeafNode *nodeLeftBrother = NULL;
+
+   nodeFather = internalNodeLoad(father);
+   Address sonAddress = nodeFather->children[sonPosition];
+   node = LeafNodeLoad(sonAddress);
+
+   Address leftBrother = nodeFather->children[sonPosition - 1];
+   Address rightBrother = nodeFather->children[sonPosition + 1];
+
+   //se existir irmão a direita, ele seta
+   if (sonPosition < (nodeFather->numberOfKeys - 1))
+      nodeRightBrother = LeafNodeLoad(rightBrother);
+   //se existir irmão a esquerda, ele seta
+   else if (sonPosition > 0)
+      nodeLeftBrother = LeafNodeLoad(leftBrother);
+
+   bool nodeLeftBrotherHasMoreKeysThanNecessary = (nodeLeftBrother && (nodeLeftBrother->numberOfKeys > (branchingFactor - 1)));
+   bool nodeHasMoreKeysThanNecessary = (node && node->numberOfKeys > (branchingFactor - 1));
+   bool nodeRightBrotherHasMoreKeysThanNecessary = (nodeRightBrother && (nodeRightBrother->numberOfKeys > (branchingFactor - 1)));
+   bool doNotHasTheNecessaryConditionsToExecute = (nodeHasMoreKeysThanNecessary && (nodeLeftBrotherHasMoreKeysThanNecessary && nodeRightBrotherHasMoreKeysThanNecessary);
+   
+   if (doNotHasTheNecessaryConditionsToExecute)
+      return;
+
+   
+}
+void internalNodeoperation3B(Address father, int sonPosition)
+{
+}
