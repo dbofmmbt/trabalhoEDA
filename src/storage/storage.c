@@ -44,6 +44,7 @@ void insertOnTree(void *info)
 {
     loadMetadata();
     int id = meta->idCounter++;
+    meta->quantityInfos++;
     mainModel.setId(info, id);
 
     if (meta->rootIsLeaf)
@@ -126,6 +127,7 @@ void insertOnTree(void *info)
             shouldFixTree = false;
             continue;
         }
+        leafNodeFree(leaf);
         internalNodeFree(father);
         father = internalNodeLoad(fatherAddress);
     } while (shouldFixTree);
@@ -218,7 +220,76 @@ void *removeFromTree(int id) // TODO
         father = internalNodeLoad(fatherAddress);
     }
     // At this point, we got the father.
-    
+    bool shouldFixTree = true;
+    Address leafAddress;
+    LeafNode *leaf;
+    do
+    {
+        int i = 0;
+        while (i < father->numberOfKeys && father->IDs[i] < id)
+            i++;
+        leafAddress = father->children[i];
+
+        leaf = leafNodeLoad(leafAddress);
+        if (leaf->numberOfKeys == branchingFactor - 1)
+        {
+            bool operated = false;
+
+            if (i < father->numberOfKeys - 1)
+            {
+                LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(rightBrother);
+            }
+            if (i > 0 && !operated)
+            {
+                LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
+        }
+        else // Happens when no division nor operation was necessary.
+        {
+            internalNodeFree(father);
+            shouldFixTree = false;
+            continue;
+        }
+        internalNodeFree(father);
+        leafNodeFree(leaf);
+        father = internalNodeLoad(fatherAddress);
+    } while (shouldFixTree);
+
+    // At this point, we got the leaf.
+    int i = 0, j;
+    while (i < leaf->numberOfKeys && id != mainModel.getId(leaf->info[i]))
+        i++;
+    if (i == leaf->numberOfKeys)
+    {
+        leafNodeFree(leaf);
+        return NULL;
+    }
+    void *info = leaf->info[i];
+    for (j = i; j < leaf->numberOfKeys - 1; j++)
+    {
+        leaf->info[j] = leaf->info[j + 1];
+    }
+    leaf->numberOfKeys--;
+    leafNodeStore(leaf, leafAddress);
+    leafNodeFree(leaf);
+
+    meta->quantityInfos--;
+    storeMetadata();
+    return info;
 }
 
 bool updateOnTree(void *info)
