@@ -7,9 +7,9 @@
 typedef struct IN
 {
     int numberOfKeys;
+    bool isPointingToLeaf;
     int *IDs;
     Address *children;
-    bool isPointingToLeaf;
 } InternalNode;
 
 //cria um nó interno na MP e retorna um ponteiro pra ele
