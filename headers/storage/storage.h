@@ -16,10 +16,10 @@ void insertOnTree(void *info); // TODO
 
 void *removeFromTree(int id); // TODO
 
-bool updateOnTree(void *info); // TODO
+bool updateOnTree(void *info);
 
-void *getFromTree(int id); // TODO
+void *getFromTree(int id);
 
-void *getAllFromTree(void); // TODO
+void *forEachInfo(void (*callback)(void *));
 
 #endif
