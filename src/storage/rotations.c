@@ -19,9 +19,56 @@ extern InfoModel mainModel;
            chave do pai para o nó intercalado.
 */
 
-void leafNodeDivision(Address father, int sonPosition);
+static void fatherInsertion(InternalNode *father, int sonPosition, int newKey, Address newNodeAddress)
+{
+   for (int i = father->numberOfKeys; i > sonPosition; i--)
+      father->children[i + 1] = father->children[i];
+   father->children[sonPosition + 1] = newNodeAddress;
 
-void internalNodeDivision(Address father, int sonPosition);
+   int index;
+
+   for (int i = 0; i < father->numberOfKeys; i++)
+   {
+      if (father->IDs[i] >= newKey)
+      {
+         index = i;
+      }
+   }
+   for (int i = father->numberOfKeys; i > index; i--)
+   {
+      father->IDs[i] = father->IDs[i - 1];
+   }
+   father->IDs[index] = newKey;
+}
+
+void leafNodeDivision(Address father, int sonPosition)
+{
+   InternalNode *fatherNode = internalNodeLoad(father);
+   LeafNode *sonNode = leafNodeLoad(fatherNode->children[sonPosition]);
+   LeafNode *newLeafNode;
+
+   newLeafNode->prox = sonNode->prox;
+   for (int i = branchingFactor; i < ((branchingFactor * 2) - 1); i++)
+   {
+      newLeafNode->info[i] = sonNode->info[i];
+      newLeafNode->numberOfKeys++;
+   }
+   sonNode->numberOfKeys = branchingFactor - 1;
+
+   Address newLeafNodeAddress = leafNodeStore(newLeafNode, -1);
+   sonNode->prox = newLeafNodeAddress;
+   leafNodeStore(sonNode, sonPosition);
+
+   fatherInsertion(&fatherNode, sonPosition, mainModel.getId(newLeafNode->info[0]), newLeafNodeAddress);
+
+   leafNodeFree(sonNode);
+   leafNodeFree(newLeafNode);
+   internalNodeFree(father);
+}
+
+void internalNodeDivision(Address father, int sonPosition)
+{
+}
 
 void leafNodeoperation3A(Address father, int sonPosition)
 {
