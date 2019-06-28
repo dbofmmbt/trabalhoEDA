@@ -9,6 +9,8 @@
 
 #define UNUSED_PARAMETER(x) ((void)x)
 
+extern Metadata *meta;
+
 InfoModel mainModel = {
     pizzaSave,
     pizzaRead,
@@ -23,44 +25,52 @@ InfoModel mainModel = {
 InfoView mainView = {
     pizzaPrint,
     pizzaName,
-    showMenu
-};
+    showMenu};
 
 int main(int argc, char const *argv[])
 {
     UNUSED_PARAMETER(argc);
     UNUSED_PARAMETER(argv);
     int menuAnswer;
-    UNUSED_PARAMETER(argc);
-    UNUSED_PARAMETER(argv);
     menuAnswer = showMenu();
     while (menuAnswer != 666)
     {
         switch (menuAnswer)
         {
         case 1: //Adicionar pizza
-            {
-                Pizza *p;
-                UNUSED_PARAMETER(p);
-                break;
-            }
+        {
+            Pizza *p;
+            UNUSED_PARAMETER(p);
+            break;
+        }
         case 3: //Alterar pizza
-            
+
             break;
         case 5: //Remover pizza por ID
-            
+
             break;
         case 6: //Remover categoria e todas as pizza da categoria
-            
+            int id;
+            printf("Entre com o ID a ser buscado\nR: ");
+            scanf("%d", &id);
+            void* v = getFromTree(id);
+            mainView.infoPrint(v);
+            mainModel.infoFree(v);
             break;
         case 7: //Listar todas as pizzas
-            
-            break;
+        {
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+            printf("|                    LISTA                    |\n");
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+            forEachInfo(pizzaPrint);
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+        }
+        break;
         case 8: //Buscar pizza por ID
-            
+
             break;
         case 9: //Listar pizzas de uma categoria
-            
+
             break;
 
         default:

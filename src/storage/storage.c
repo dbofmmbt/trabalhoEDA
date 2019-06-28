@@ -72,13 +72,35 @@ Address getInfoAddress(int ID) // TODO
     //recebe um ID e retorna o endereço dele no arquivo
 }
 
+//search a node by his ID , load the node to the MP and return the pointer to where it is
 void *getFromTree(int id) // TODO
 {
-    //search a node by his ID , load the node to the MP and return the pointer to where it is
+    Address infoAdress = getInfoAddress(id);
+    if (infoAdress != -1){
+        FILE *f = fopen(DATA_FILE_PATH, "rb");
+        fseek(f, infoAdress, SEEK_SET);
+        void *info = mainModel.infoLoader(f);
+        fclose(f);
+        return info;
+    }
+    return NULL;
 }
 
-void *getAllFromTree(void)
+// Applies the given function on each information stored on the Tree
+void *forEachInfo(void (*callback)(void *))
 {
+    Address currentNodeAddress = getPossibleLeafAddress(1);
+    do
+    {   
+        LeafNode *leaf = leafNodeLoad(currentNodeAddress);
+        for (int i = 0; i < leaf->numberOfKeys; i++)
+        {
+            callback(leaf->info[i]);
+        }
+        currentNodeAddress = leaf->prox;
+        LeafNodeFree(leaf);
+    } while (currentNodeAddress != -1);
+
     return NULL;
 }
 
