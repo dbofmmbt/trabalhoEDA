@@ -1,13 +1,18 @@
 #include <unistd.h>
 #include <storage.h>
 
-extern int ramificationFactor;
+extern int branchingFactor;
 extern Metadata *meta;
 extern InfoModel mainModel;
 
+static Address getInfoAddress(int id);
+static Address getPossibleFatherAddress(int id);
+static Address getPossibleLeafAddress(int id);
+static void *loadRoot(void);
+
 void setupStorage(char *catalogName, int degree)
 {
-    ramificationFactor = degree;
+    branchingFactor = degree;
     if (access(METADATA_FILE_PATH, F_OK)) // If it exists, there's no need to setup the Store.
     {
         loadMetadata();
@@ -30,7 +35,7 @@ void setupStorage(char *catalogName, int degree)
     if (!catalog)
         return;
     void *info;
-    while (info = mainModel.infoLoader(catalog))
+    while ((info = mainModel.infoLoader(catalog)))
         insertOnTree(info);
     fclose(catalog);
 }
@@ -67,7 +72,7 @@ bool updateOnTree(void *info)
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
 }
 
-Address getInfoAddress(int id)
+static Address getInfoAddress(int id)
 {
     Address leafAddress = getPossibleLeafAddress(id);
     LeafNode *leaf = leafNodeLoad(leafAddress);
@@ -109,7 +114,7 @@ void *forEachInfo(void (*callback)(void *))
             callback(leaf->info[i]);
         }
         currentNodeAddress = leaf->prox;
-        LeafNodeFree(leaf);
+        leafNodeFree(leaf);
     } while (currentNodeAddress != -1);
 
     return NULL;
@@ -119,7 +124,7 @@ void *forEachInfo(void (*callback)(void *))
     The Root node could be a leaf or an internal node. The user of this function
     will have to cast it correctly by checking the meta information about the root.
  */
-void *loadRoot(void)
+static void *loadRoot(void)
 {
     void *root;
     Address rootAddress = meta->rootPosition;
@@ -136,7 +141,7 @@ void *loadRoot(void)
 
     It will rotate the tree in the process, if needed.
 */
-Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotations while going through the Tree.
+static Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotations while going through the Tree.
 {
     if (meta->rootIsLeaf)
         return -1;
@@ -156,7 +161,7 @@ Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotation
 }
 
 /* Used by search and update functions to get or change an information. */
-Address getPossibleLeafAddress(int id)
+static Address getPossibleLeafAddress(int id)
 {
     Address fatherAddress = getPossibleFatherAddress(id);
     Address leafAddress = -1;
@@ -170,20 +175,18 @@ Address getPossibleLeafAddress(int id)
         leafAddress = father->children[i];
 
         LeafNode *leaf = leafNodeLoad(leafAddress);
-        if (leaf->numberOfKeys == 2 * ramificationFactor)
+        if (leaf->numberOfKeys == 2 * branchingFactor)
         {
-            leafNodeFree(leaf);
-            leafNodeFree(father);
             leafNodeDivision(fatherAddress, i);
         }
-        else if (leaf->numberOfKeys == ramificationFactor - 1)
+        else if (leaf->numberOfKeys == branchingFactor - 1)
         {
             bool operated = false;
 
             if (i < father->numberOfKeys - 1)
             {
                 LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
-                if (rightBrother->numberOfKeys >= ramificationFactor)
+                if (rightBrother->numberOfKeys >= branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;
@@ -193,7 +196,7 @@ Address getPossibleLeafAddress(int id)
             if (i > 0 && !operated)
             {
                 LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
-                if (leftBrother->numberOfKeys >= ramificationFactor)
+                if (leftBrother->numberOfKeys >= branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;

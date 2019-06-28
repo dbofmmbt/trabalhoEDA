@@ -1,13 +1,15 @@
 #include <internal_node.h>
 
 extern InfoModel mainModel;
-extern int ramificationFactor;
+extern int branchingFactor;
+
+static InternalNode *internalNodeInitialize(InternalNode *node);
 
 //cria um nó interno na MP e retorna um ponteiro pra ele
 InternalNode *internalNodeCreate()
 {
-    int maxNumberOfKeys = (ramificationFactor * 2) - 1;
-    int maxNumberOfChildren = ((ramificationFactor * 2));
+    int maxNumberOfKeys = (branchingFactor * 2) - 1;
+    int maxNumberOfChildren = ((branchingFactor * 2));
 
     InternalNode *newNode = (InternalNode *)malloc(sizeof(InternalNode));
 
@@ -22,8 +24,8 @@ InternalNode *internalNodeCreate()
 static InternalNode *internalNodeInitialize(InternalNode *node)
 {
 
-    int maxNumberOfKeys = (ramificationFactor * 2) - 1;
-    int maxNumberOfChildren = ((ramificationFactor * 2));
+    int maxNumberOfKeys = (branchingFactor * 2) - 1;
+    int maxNumberOfChildren = ((branchingFactor * 2));
     //numero de chaves iniciando com 0
     node->numberOfKeys = 0;
     node->isPointingToLeaf = false;
@@ -45,8 +47,8 @@ static InternalNode *internalNodeInitialize(InternalNode *node)
 para inserir no final do arquivo, passe como parâmetro -1 para a Posição de inserção*/
 Address internalNodeStore(InternalNode *node, Address insertPosition)
 {
-    int maxNumberOfKeys = (ramificationFactor * 2) - 1;
-    int maxNumberOfChildren = ((ramificationFactor * 2));
+    int maxNumberOfKeys = (branchingFactor * 2) - 1;
+    int maxNumberOfChildren = ((branchingFactor * 2));
 
     FILE *archive = fopen(MAIN_INDEX_FILE_PATH, "rb+");
 
@@ -73,8 +75,8 @@ Address internalNodeStore(InternalNode *node, Address insertPosition)
 InternalNode *internalNodeLoad(Address nodePosition)
 {
 
-    int maxNumberOfKeys = (ramificationFactor * 2) - 1;
-    int maxNumberOfChildren = ((ramificationFactor * 2));
+    int maxNumberOfKeys = (branchingFactor * 2) - 1;
+    int maxNumberOfChildren = ((branchingFactor * 2));
 
     InternalNode *node = internalNodeCreate();
     FILE *archive = fopen(MAIN_INDEX_FILE_PATH, "rb");

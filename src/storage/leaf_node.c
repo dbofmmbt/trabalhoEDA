@@ -2,15 +2,15 @@
 #include <leaf_node.h>
 #include <info_model.h>
 
-extern int ramificationFactor;
+extern int branchingFactor;
 extern InfoModel mainModel;
 
-LeafNode *leafNodeCreate(int t)
+LeafNode *leafNodeCreate(void)
 {
     LeafNode *leaf = (LeafNode *)malloc(sizeof(LeafNode));
 
     leaf->numberOfKeys = 0;
-    leaf->info = malloc(sizeof(void *) * ramificationFactor * 2 - 1);
+    leaf->info = malloc(sizeof(void *) * branchingFactor * 2 - 1);
     leaf->prox = -1;
 
     return leaf;
@@ -36,7 +36,7 @@ Address leafNodeStore(LeafNode *node, Address pos)
         mainModel.infoSaver(info, f);
     }
 
-    int maxNumberKeys = ramificationFactor * 2 - 1;
+    int maxNumberKeys = branchingFactor * 2 - 1;
     fwrite("0", sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
 
     fwrite(&node->prox, sizeof(int), 1, f);
@@ -46,7 +46,7 @@ Address leafNodeStore(LeafNode *node, Address pos)
 
 LeafNode *leafNodeLoad(Address pos)
 {
-    LeafNode *leaf = leafNodeCreate(ramificationFactor);
+    LeafNode *leaf = leafNodeCreate();
     FILE *f = fopen(DATA_FILE_PATH, "rb");
     fseek(f, pos, SEEK_SET);
 
@@ -55,10 +55,10 @@ LeafNode *leafNodeLoad(Address pos)
     for (int i = 0; i < leaf->numberOfKeys; i++)
         leaf->info[i] = mainModel.infoLoader(f);
 
-    int maxNumberKeys = ramificationFactor * 2 - 1;
+    int maxNumberKeys = branchingFactor * 2 - 1;
     fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberOfKeys), SEEK_CUR);
 
-    fread(leaf->prox, sizeof(Address), 1, f);
+    fread(&leaf->prox, sizeof(Address), 1, f);
 
     fclose(f);
     return leaf;

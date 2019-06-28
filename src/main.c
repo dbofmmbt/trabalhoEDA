@@ -50,13 +50,15 @@ int main(int argc, char const *argv[])
 
             break;
         case 6: //Remover categoria e todas as pizza da categoria
-            int id;
-            printf("Entre com o ID a ser buscado\nR: ");
-            scanf("%d", &id);
-            void* v = getFromTree(id);
-            mainView.infoPrint(v);
-            mainModel.infoFree(v);
-            break;
+            {
+                int id;
+                printf("Entre com o ID a ser buscado\nR: ");
+                scanf("%d", &id);
+                void *v = getFromTree(id);
+                mainView.infoPrint(v);
+                mainModel.infoFree(v);
+                break;
+            }
         case 7: //Listar todas as pizzas
         {
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
