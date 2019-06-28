@@ -138,13 +138,88 @@ void insertOnTree(void *info)
         leaf->info[j] = leaf->info[j - 1];
     leaf->info[i] = info;
     leaf->numberOfKeys++;
-    leafNodeStore(leaf,leafAddress);
+    leafNodeStore(leaf, leafAddress);
     leafNodeFree(leaf);
 
     storeMetadata();
 }
 
-void *removeFromTree(int id); // TODO
+void *removeFromTree(int id) // TODO
+{
+    if (meta->rootIsLeaf)
+    {
+        LeafNode *root = leafNodeLoad(meta->rootPosition);
+        int i = 0, j;
+        while (i < root->numberOfKeys && id != mainModel.getId(root->info[i]))
+            i++;
+        if (i == root->numberOfKeys)
+        {
+            leafNodeFree(root);
+            return NULL;
+        }
+        void *info = root->info[i];
+        for (j = i; j < root->numberOfKeys - 1; j++)
+        {
+            root->info[j] = root->info[j + 1];
+        }
+        root->numberOfKeys--;
+        leafNodeStore(root, meta->rootPosition);
+        leafNodeFree(root);
+        return info;
+    }
+
+    InternalNode *father = loadRoot();
+    Address fatherAddress = meta->rootPosition;
+
+    while (!father->isPointingToLeaf)
+    {
+        int i = 0;
+        while (i < father->numberOfKeys && father->IDs[i] < id)
+            i++;
+        Address sonAddress = father->children[i];
+        InternalNode *son = internalNodeLoad(sonAddress);
+
+        if (son->numberOfKeys == branchingFactor - 1)
+        {
+            bool operated = false;
+
+            if (i < father->numberOfKeys - 1)
+            {
+                InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(rightBrother);
+            }
+            if (i > 0 && !operated)
+            {
+                InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
+        }
+        else // If the son doesn't need operations, continue the search down the Tree.
+        {
+            internalNodeFree(father);
+            father = son;
+            continue;
+        }
+        // The son needed operations. Therefore, the father must be accessed again.
+        internalNodeFree(son);
+        internalNodeFree(father);
+        father = internalNodeLoad(fatherAddress);
+    }
+    // At this point, we got the father.
+    
+}
 
 bool updateOnTree(void *info)
 {
