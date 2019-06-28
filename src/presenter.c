@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #include <presenter.h>
+#include <info_view.h>
+
+extern InfoView mainView;
+int menuWidth = 25;
 
 static int showSubMenu(int option)
 {
@@ -9,13 +14,19 @@ static int showSubMenu(int option)
         switch (option)
         {
         case 2:
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("#          MENU         #\n");
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("# [1] Remover por ID    #\n");
             printf("# [2] Remover categoria #\n");
             printf("# [666] Voltar          #\n");
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("R: ");
             scanf("%d", &answer);
             if (answer == 666)
@@ -30,14 +41,20 @@ static int showSubMenu(int option)
             break;
 
         case 4:
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("#          MENU         #\n");
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("# [1] Listar todas      #\n");
             printf("# [2] Buscar por ID     #\n");
             printf("# [3] Listar categoria  #\n");
             printf("# [666] Voltar          #\n");
-            printf("#########################\n");
+            for (int i = 0; i < menuWidth; i++)
+                printf("#");
+            printf("\n");
             printf("R: ");
             scanf("%d", &answer);
             if (answer == 666)
@@ -63,15 +80,40 @@ int showMenu(void)
     int answer;
     while (1)
     {
-        printf("#########################\n");
+        int len = strlen(mainView.infoName(0));
+
+        for (int i = 0; i < menuWidth; i++)
+            printf("#");
+        printf("\n");
         printf("#          MENU         #\n");
-        printf("#########################\n");
-        printf("# [1] Adicionar Pizza   #\n");
-        printf("# [2] Remover Pizza     #\n");
-        printf("# [3] Alterar Pizza     #\n");
-        printf("# [4] Buscar Pizza      #\n");
+        for (int i = 0; i < menuWidth; i++)
+            printf("#");
+        printf("\n");
+
+        printf("# [1] Adicionar %s", mainView.infoName(0));
+        for (int i = 0; i < (menuWidth - 17 - len); i++)
+            printf(" ");
+        printf("#\n");
+
+        printf("# [2] Remover %s", mainView.infoName(0));
+        for (int i = 0; i < (menuWidth - 15 - len); i++)
+            printf(" ");
+        printf("#\n");
+
+        printf("# [3] Alterar %s", mainView.infoName(0));
+        for (int i = 0; i < (menuWidth - 15 - len); i++)
+            printf(" ");
+        printf("#\n");
+
+        printf("# [4] Buscar %s", mainView.infoName(0));
+        for (int i = 0; i < (menuWidth - 14 - len); i++)
+            printf(" ");
+        printf("#\n");
+
         printf("# [666] Sair            #\n");
-        printf("#########################\n");
+        for (int i = 0; i < menuWidth; i++)
+            printf("#");
+        printf("\n");
         printf("R: ");
         scanf("%d", &answer);
         if (answer == 1 || answer == 3 || answer == 666)
@@ -88,7 +130,6 @@ int showMenu(void)
         }
     }
 }
-
 
 void showInfo(void)
 {
