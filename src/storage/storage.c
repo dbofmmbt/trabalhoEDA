@@ -397,15 +397,6 @@ static Address getPossibleFatherAddress(int id)
     InternalNode *father = loadRoot();
     Address fatherAddress = meta->rootPosition;
 
-    if (father->numberOfKeys == 2 * branchingFactor - 1)
-    {
-        InternalNode *newRoot = internalNodeCreate();
-        newRoot->children[0] = fatherAddress;
-        Address newRootAddress = internalNodeStore(newRoot, -1);
-        internalNodeDivision(newRootAddress, 0);
-        meta->rootPosition = newRootAddress;
-    }
-
     while (!father->isPointingToLeaf)
     {
         int i = 0;
@@ -414,48 +405,10 @@ static Address getPossibleFatherAddress(int id)
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
 
-        if (son->numberOfKeys == 2 * branchingFactor - 1)
-        {
-            internalNodeDivision(fatherAddress, i);
-        }
-        else if (son->numberOfKeys == branchingFactor - 1)
-        {
-            bool operated = false;
-
-            if (i < father->numberOfKeys - 1)
-            {
-                InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
-                if (rightBrother->numberOfKeys >= branchingFactor)
-                {
-                    operation3A(fatherAddress, i);
-                    operated = true;
-                }
-                internalNodeFree(rightBrother);
-            }
-            if (i > 0 && !operated)
-            {
-                InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
-                if (leftBrother->numberOfKeys >= branchingFactor)
-                {
-                    operation3A(fatherAddress, i);
-                    operated = true;
-                }
-                internalNodeFree(leftBrother);
-            }
-            if (!operated)
-                operation3B(fatherAddress, i);
-        }
-        else // If the son doesn't need operations, continue the search down the Tree.
-        {
-            internalNodeFree(father);
-            father = son;
-            continue;
-        }
-        // The son needed operations. Therefore, the father must be accessed again.
-        internalNodeFree(son);
         internalNodeFree(father);
-        father = internalNodeLoad(fatherAddress);
+        father = son;
     }
+    internalNodeFree(father);
     return fatherAddress;
 }
 
@@ -463,73 +416,15 @@ static Address getPossibleFatherAddress(int id)
 static Address getPossibleLeafAddress(int id)
 {
     Address fatherAddress = getPossibleFatherAddress(id);
-    Address leafAddress = -1;
 
     if (fatherAddress == -1) // Treating the case where the root is a Leaf.
-    {
-        LeafNode *root = leafNodeLoad(meta->rootPosition);
-        if (root->numberOfKeys == 2 * branchingFactor - 1)
-        {
-            InternalNode *newRoot = internalNodeCreate();
-            newRoot->isPointingToLeaf = true;
-            newRoot->children[0] = meta->rootPosition;
-            Address newRootAddress = internalNodeStore(newRoot, -1);
-            leafNodeDivision(newRootAddress, 0);
-            meta->rootPosition = newRootAddress;
-            meta->rootIsLeaf = false;
-            return getPossibleLeafAddress(id);
-        }
-        return root;
-    }
+        return meta->rootPosition;
 
-    bool shouldFixTree = true;
-    do
-    {
-        InternalNode *father = internalNodeLoad(fatherAddress);
-        int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
-            i++;
-        leafAddress = father->children[i];
-
-        LeafNode *leaf = leafNodeLoad(leafAddress);
-        if (leaf->numberOfKeys == 2 * branchingFactor - 1)
-        {
-            leafNodeDivision(fatherAddress, i);
-        }
-        else if (leaf->numberOfKeys == branchingFactor - 1)
-        {
-            bool operated = false;
-
-            if (i < father->numberOfKeys - 1)
-            {
-                LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
-                if (rightBrother->numberOfKeys >= branchingFactor)
-                {
-                    operation3A(fatherAddress, i);
-                    operated = true;
-                }
-                leafNodeFree(rightBrother);
-            }
-            if (i > 0 && !operated)
-            {
-                LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
-                if (leftBrother->numberOfKeys >= branchingFactor)
-                {
-                    operation3A(fatherAddress, i);
-                    operated = true;
-                }
-                leafNodeFree(leftBrother);
-            }
-            if (!operated)
-                operation3B(fatherAddress, i);
-        }
-        else // Happens when no division nor operation was necessary.
-        {
-            shouldFixTree = false;
-        }
-        internalNodeFree(father);
-        leafNodeFree(leaf);
-    } while (shouldFixTree);
-
+    InternalNode *father = internalNodeLoad(fatherAddress);
+    int i = 0;
+    while (i < father->numberOfKeys && father->IDs[i] < id)
+        i++;
+    Address leafAddress = father->children[i];
+    internalNodeFree(father);
     return leafAddress;
 }
