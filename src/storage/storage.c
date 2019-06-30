@@ -89,10 +89,11 @@ static Address getInfoAddress(int id)
 }
 
 //search a node by his ID , load the node to the MP and return the pointer to where it is
-void *getFromTree(int id) // TODO
+void *getFromTree(int id)
 {
     Address infoAdress = getInfoAddress(id);
-    if (infoAdress != -1){
+    if (infoAdress != -1)
+    {
         FILE *f = fopen(DATA_FILE_PATH, "rb");
         fseek(f, infoAdress, SEEK_SET);
         void *info = mainModel.infoLoader(f);
@@ -107,7 +108,7 @@ void *forEachInfo(void (*callback)(void *))
 {
     Address currentNodeAddress = getPossibleLeafAddress(1);
     do
-    {   
+    {
         LeafNode *leaf = leafNodeLoad(currentNodeAddress);
         for (int i = 0; i < leaf->numberOfKeys; i++)
         {
@@ -141,23 +142,73 @@ static void *loadRoot(void)
 
     It will rotate the tree in the process, if needed.
 */
-static Address getPossibleFatherAddress(int id) // TODO: it needs to check for rotations while going through the Tree.
+static Address getPossibleFatherAddress(int id)
 {
     if (meta->rootIsLeaf)
         return -1;
-    InternalNode *currentNode = loadRoot();
-    Address nodeAddress = meta->rootPosition;
-    while (!currentNode->isPointingToLeaf)
+    InternalNode *father = loadRoot();
+    Address fatherAddress = meta->rootPosition;
+
+    if (father->numberOfKeys == 2 * branchingFactor - 1)
+    {
+        InternalNode *newRoot = internalNodeCreate();
+        newRoot->children[0] = fatherAddress;
+        Address newRootAddress = internalNodeStore(newRoot, -1);
+        internalNodeDivision(newRootAddress, 0);
+        meta->rootPosition = newRootAddress;
+    }
+
+    while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < currentNode->numberOfKeys && currentNode->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] < id)
             i++;
-        InternalNode *aux = currentNode;
-        nodeAddress = currentNode->children[i];
-        currentNode = internalNodeLoad(nodeAddress);
-        internalNodeFree(aux);
+        Address sonAddress = father->children[i];
+        InternalNode *son = internalNodeLoad(sonAddress);
+
+        if (son->numberOfKeys == 2 * branchingFactor - 1)
+        {
+            internalNodeDivision(fatherAddress, i);
+        }
+        else if (son->numberOfKeys == branchingFactor - 1)
+        {
+            bool operated = false;
+
+            if (i < father->numberOfKeys - 1)
+            {
+                InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(rightBrother);
+            }
+            if (i > 0 && !operated)
+            {
+                InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
+        }
+        else // If the son doesn't need operations, continue the search down the Tree.
+        {
+            internalNodeFree(father);
+            father = son;
+            continue;
+        }
+        // The son needed operations. Therefore, the father must be accessed again.
+        internalNodeFree(son);
+        internalNodeFree(father);
+        father = internalNodeLoad(fatherAddress);
     }
-    return nodeAddress;
+    return fatherAddress;
 }
 
 /* Used by search and update functions to get or change an information. */
@@ -175,7 +226,7 @@ static Address getPossibleLeafAddress(int id)
         leafAddress = father->children[i];
 
         LeafNode *leaf = leafNodeLoad(leafAddress);
-        if (leaf->numberOfKeys == 2 * branchingFactor)
+        if (leaf->numberOfKeys == 2 * branchingFactor - 1)
         {
             leafNodeDivision(fatherAddress, i);
         }
