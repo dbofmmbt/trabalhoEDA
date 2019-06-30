@@ -151,10 +151,10 @@ void internalNodeoperation3A(Address father, int sonPosition)
    else if (nodeLeftBrother && (nodeLeftBrother->numberOfKeys > (branchingFactor - 1)))
    {
       //ando com todos as chaves do nó e seus filhos pra direita
-      for (int i = node->numberOfKeys; i > 0 ; i--)
-         node->IDs[i] = node->IDs[i-1];
+      for (int i = node->numberOfKeys; i > 0; i--)
+         node->IDs[i] = node->IDs[i - 1];
       for (int i = node->numberOfKeys + 1; i > 0; i--)
-         node->children[i] = node->children[i-1];
+         node->children[i] = node->children[i - 1];
       //incremento a quantidade de chaves do nó
       node->numberOfKeys++;
 
@@ -192,7 +192,6 @@ void internalNodeoperation3A(Address father, int sonPosition)
       internalNodeStore(nodeLeftBrother, leftBrother);
       internalNodeFree(nodeLeftBrother);
    }
-}
 }
 
 void operation3A(Address father, int sonPosition)
