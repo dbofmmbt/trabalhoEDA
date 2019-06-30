@@ -22,4 +22,8 @@ void *getFromTree(int id);
 
 void *forEachInfo(void (*callback)(void *));
 
+void *printAllFromSecIndex(void (*callback)(void *), void *secIndex);
+
+void *removeAllFromSecIndex(void (*callback)(void *), void *secIndex);
+
 #endif

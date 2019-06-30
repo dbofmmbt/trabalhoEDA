@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <storage.h>
+#include <stdarg.h>
 
 extern int branchingFactor;
 extern Metadata *meta;
@@ -116,6 +117,49 @@ void *forEachInfo(void (*callback)(void *))
         }
         currentNodeAddress = leaf->prox;
         leafNodeFree(leaf);
+    } while (currentNodeAddress != -1);
+
+    return NULL;
+}
+
+void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
+{
+    Address currentNodeAddress = getPossibleLeafAddress(1);
+    do
+    {
+        LeafNode *leaf = leafNodeLoad(currentNodeAddress);
+        for (int i = 0; i < leaf->numberOfKeys; i++)
+        {
+            //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
+            if (strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
+                callback(leaf->info[i]);
+        }
+        currentNodeAddress = leaf->prox;
+        leafNodeFree(leaf);
+    } while (currentNodeAddress != -1);
+
+    return NULL;
+}
+
+void *removeAllFromSecIndex(void (*callback)(void *), void *secIndex)
+{
+    Address currentNodeAddress = getPossibleLeafAddress(1);
+    do
+    {
+        LeafNode *leaf = leafNodeLoad(currentNodeAddress);
+        for (int i = 0; i < leaf->numberOfKeys; i++)
+        {
+            //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
+            if (strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
+                callback(leaf->info[i]);
+                leafNodeFree(leaf);
+                leaf = leafNodeLoad(currentNodeAddress);
+                i--;
+        }
+
+        currentNodeAddress = leaf->prox;
+        leafNodeFree(leaf);
+
     } while (currentNodeAddress != -1);
 
     return NULL;

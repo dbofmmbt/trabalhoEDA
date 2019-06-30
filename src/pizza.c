@@ -1,15 +1,6 @@
 #include <utils.h>
 #include <pizza.h>
 
-struct pizza
-{
-	int id;
-	char name[50];
-	char category[20];
-	float price;
-	int nextCategoryElement;
-};
-
 void pizzaPrint(void *v)
 {
 	Pizza *p = (Pizza *)v;

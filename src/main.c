@@ -39,26 +39,56 @@ int main(int argc, char const *argv[])
         {
         case 1: //Adicionar pizza
         {
-            Pizza *p;
-            UNUSED_PARAMETER(p);
+            char *namePizza;
+            char *categoryPizza;
+            float pricePizza;
+
+            printf("Nome: ");
+            scanf("%s", &namePizza);
+            printf("Categoria: ");
+            scanf("%s", &categoryPizza);
+            printf("Preco: ");
+            scanf("%f", &pricePizza);
+
+            Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+            insertOnTree(p);
             break;
         }
         case 3: //Alterar pizza
-
+        {
+            int IDPizza;
+            char *namePizza;
+            char *categoryPizza;
+            float pricePizza;
+            
+            printf("ID da pizza a ser alterada: ");
+            scanf("%d", &IDPizza);
+            printf("Novo Nome: ");
+            scanf("%s", &namePizza);
+            printf("Nova Categoria: ");
+            scanf("%s", &categoryPizza);
+            printf("Novo Preco: ");
+            scanf("%f", &pricePizza);
+            Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+            updateOnTree(p);
             break;
+        }
         case 5: //Remover pizza por ID
-
+        {
+            int IDPizza;
+            printf("ID da pizza a ser removida: ");
+            scanf("%d", &IDPizza);
+            removeFromTree(IDPizza);
             break;
+        }
         case 6: //Remover categoria e todas as pizza da categoria
-            {
-                int id;
-                printf("Entre com o ID a ser buscado\nR: ");
-                scanf("%d", &id);
-                void *v = getFromTree(id);
-                mainView.infoPrint(v);
-                mainModel.infoFree(v);
-                break;
-            }
+        {
+            char *categoryPizza;
+            printf("Categoria a ser removida: ");
+            scanf("%s", &categoryPizza);
+            removeAllFromSecIndex(removeFromTree, categoryPizza);
+            break;
+        }
         case 7: //Listar todas as pizzas
         {
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
@@ -69,11 +99,21 @@ int main(int argc, char const *argv[])
         }
         break;
         case 8: //Buscar pizza por ID
-
+        {
+            int IDPizza;
+            printf("ID da pizza a ser buscada: ");
+            scanf("%d", &IDPizza);
+            getFromTree(IDPizza);
             break;
+        }
         case 9: //Listar pizzas de uma categoria
-
+        {
+            char *secIndex;
+            printf("Categoria a ser listada: ");
+            scanf("%s", &secIndex);
+            printAllFromSecIndex(pizzaPrint, secIndex);
             break;
+        }
 
         default:
             break;
