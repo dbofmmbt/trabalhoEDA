@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
     UNUSED_PARAMETER(argc);
     UNUSED_PARAMETER(argv);
     int menuAnswer;
-    menuAnswer = showMenu();
+    menuAnswer = mainView.showMenu();
     while (menuAnswer != 666)
     {
         switch (menuAnswer)
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[])
             char *namePizza;
             char *categoryPizza;
             float pricePizza;
-            
+
             printf("ID da pizza a ser alterada: ");
             scanf("%d", &IDPizza);
             printf("Novo Nome: ");
@@ -103,7 +103,16 @@ int main(int argc, char const *argv[])
             int IDPizza;
             printf("ID da pizza a ser buscada: ");
             scanf("%d", &IDPizza);
-            getFromTree(IDPizza);
+            void *p = getFromTree(IDPizza);
+            if (p)
+            {
+                mainView.infoPrint(p);
+                mainModel.infoFree(p);
+            }else
+            {
+                printf("O objeto %s não foi encontrado", mainView.infoName);
+            }
+
             break;
         }
         case 9: //Listar pizzas de uma categoria
@@ -118,7 +127,7 @@ int main(int argc, char const *argv[])
         default:
             break;
         }
-        menuAnswer = showMenu();
+        menuAnswer = mainView.showMenu();
     }
     printf("Fim do programa!\nSeja feliz! :)\nComa pizza!\n");
     return 0;
