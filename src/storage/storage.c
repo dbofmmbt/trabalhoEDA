@@ -397,6 +397,7 @@ void *forEachInfo(void (*callback)(void *))
 void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
 {
     Address currentNodeAddress = getPossibleLeafAddress(1);
+    int categoryExist = 0;
     do
     {
         LeafNode *leaf = leafNodeLoad(currentNodeAddress);
@@ -404,12 +405,17 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
         {
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
             if (!strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
+            {
                 callback(leaf->info[i]);
+                categoryExist++;
+            }
         }
         currentNodeAddress = leaf->next;
         leafNodeFree(leaf);
     } while (currentNodeAddress != -1);
-
+    if (!categoryExist){
+        printf("A categoria %s nao existe.\n", (char *) secIndex);
+    }
     return NULL;
 }
 
