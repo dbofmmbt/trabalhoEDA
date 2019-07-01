@@ -233,6 +233,7 @@ void *removeFromTree(int id)
         {
             internalNodeFree(father);
             father = son;
+            fatherAddress = sonAddress;
             continue;
         }
         // The son needed operations. Therefore, the father must be accessed again.
@@ -491,6 +492,7 @@ static Address getPossibleFatherAddress(int id)
 
         internalNodeFree(father);
         father = son;
+        fatherAddress = sonAddress;
     }
     internalNodeFree(father);
     return fatherAddress;
