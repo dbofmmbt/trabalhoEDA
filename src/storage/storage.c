@@ -296,7 +296,7 @@ void *removeFromTree(int id)
 
     // At this point, we got the leaf.
     int i = 0, j;
-    while (i < leaf->numberOfKeys && id != mainModel.getId(leaf->info[i]))
+    while ((i < leaf->numberOfKeys) && (id != mainModel.getId(leaf->info[i])))
         i++;
     if (i == leaf->numberOfKeys)
     {

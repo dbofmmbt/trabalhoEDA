@@ -458,6 +458,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
             node->info[node->numberOfKeys + i] = nodeRightBrother->info[i];
          //numero de chaves no nó aumenta no numero de chaves do irmão direito
          node->numberOfKeys += nodeRightBrother->numberOfKeys;
+         nodeRightBrother->numberOfKeys = 0;
          //próximo do nó se torna o próximo do irmão da direita
          node->next = nodeRightBrother->next;
 
@@ -490,6 +491,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
          for (int i = sonPosition; i < nodeFather->numberOfKeys; i++)
             nodeFather->children[i] = nodeFather->children[i + 1];
 
+         node->numberOfKeys = 0;
          //decremento a quantidade de chaves do pai
          nodeFather->numberOfKeys--;
       }
