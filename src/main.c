@@ -27,10 +27,24 @@ InfoView mainView = {
     pizzaName,
     showMenu};
 
+void getInitialParamsAndSetStorage(void)
+{
+    char fileName[100];
+    int t;
+    printf("Digite o nome do arquivo: ");
+    scanf("%s", fileName);
+    printf("Digite o fator de ramificação: ");
+    scanf("%d", &t);
+    setupStorage(fileName, t);
+}
+
 int main(int argc, char const *argv[])
 {
     UNUSED_PARAMETER(argc);
     UNUSED_PARAMETER(argv);
+
+    getInitialParamsAndSetStorage();
+
     int menuAnswer;
     menuAnswer = mainView.showMenu();
     while (menuAnswer != 666)
@@ -108,7 +122,8 @@ int main(int argc, char const *argv[])
             {
                 mainView.infoPrint(p);
                 mainModel.infoFree(p);
-            }else
+            }
+            else
             {
                 printf("O objeto %s não foi encontrado", mainView.infoName);
             }
