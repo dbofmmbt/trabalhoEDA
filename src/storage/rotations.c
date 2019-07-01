@@ -71,13 +71,13 @@ void internalNodeDivision(Address father, int sonPosition)
 
    int idAux = sonNode->IDs[branchingFactor - 1];
 
-   for (int i = branchingFactor; i < ((branchingFactor * 2)); i++)
-      newInternalNode->children[newInternalNode->numberOfKeys++] = sonNode->children[i];
+   for (int i = branchingFactor; i < ((branchingFactor * 2) - 1); i++)
+      newInternalNode->IDs[newInternalNode->numberOfKeys++] = sonNode->IDs[i];
 
    int aux = 0;
-   for (int i = branchingFactor; i < ((branchingFactor * 2) - 1); i++)
+   for (int i = branchingFactor; i < ((branchingFactor * 2)); i++)
    {
-      newInternalNode->IDs[aux] = sonNode->IDs[i];
+      newInternalNode->children[aux] = sonNode->children[i];
       aux++;
    }
 
