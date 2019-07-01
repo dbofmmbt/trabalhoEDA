@@ -10,6 +10,9 @@ static Address getPossibleFatherAddress(int id);
 static Address getPossibleLeafAddress(int id);
 static void *loadRoot(void);
 
+void treeWidthPrint();
+void printLeafNodes();
+
 void setupStorage(char *catalogName, int degree)
 {
     branchingFactor = degree;
@@ -596,3 +599,95 @@ void printTree(void)
     printf("\n\n\n");
 }
 */
+void printTree()
+{
+    if(!meta->quantityInfos){
+        return;
+    }
+    else if (meta->rootIsLeaf)
+    {
+        treeWidthPrint();
+    }
+    else
+    {
+        printLeafNodes();
+    }
+
+    //printLeafNodes(root);
+}
+
+typedef struct addressList
+{
+    Address info;
+    struct addressList *next;
+    int deepness;
+} AddressList;
+
+void treeWidthPrint()
+{
+    Address root = meta->rootPosition;
+    AddressList *list = malloc(sizeof(AddressList));
+    AddressList *final = list;
+    //coloco a raiz na fila
+    list->info = root;
+    list->next = NULL;
+    list->deepness = 0;
+
+    while (list)
+    {
+        Address nodeAddress = list->info;
+
+        InternalNode *node = internalNodeLoad(nodeAddress);
+        if (!node->isPointingToLeaf)
+        {
+            for (int i = 0; i <= node->numberOfKeys; i++)
+            {
+                AddressList *new = malloc(sizeof(AddressList));
+                new->info = node->children[i];
+                new->deepness = list->deepness + 1;
+                new->next = NULL;
+                final->next = new;
+                final = new;
+            }
+        }
+        printf("| ");
+        for (int i = 0; i < node->numberOfKeys; i++)
+        {
+            printf("%d ", node->IDs[i]);
+        }
+        printf("|");
+
+        AddressList *aux = list;
+        list = list->next;
+        if (aux->deepness != list->deepness)
+            printf("\n");
+        free(aux);
+        free(node);
+    }
+    free(list);
+}
+
+void printLeafNodes()
+{
+    InternalNode *root = loadRoot();
+    InternalNode *aux;
+    while (!root->isPointingToLeaf)
+    {
+        aux = root;
+        internalNodeFree(root);
+        root = internalNodeLoad(aux->children[0]);
+    }
+    LeafNode *current_leaf = leafNodeLoad(root->children[0]);
+    internalNodeFree(root);
+    while (current_leaf->next != -1)
+    {
+        printf("| ");
+        for (int i = 0; i <= current_leaf->numberOfKeys; i++)
+        {
+            printf("%i", mainModel.getId(current_leaf->info[i]));
+        }
+        printf(" |");
+    }
+    internalNodeFree(root);
+    return;
+}
