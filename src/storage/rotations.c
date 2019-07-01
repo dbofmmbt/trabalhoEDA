@@ -470,7 +470,6 @@ void leafNodeoperation3B(Address father, int sonPosition)
          //decremento a quantidade de chaves do pai
          nodeFather->numberOfKeys--;
       }
-      leafNodeStore(nodeRightBrother, rightBrother);
       leafNodeFree(nodeRightBrother);
    }
    else if (nodeHasLeftBrother)
@@ -496,13 +495,18 @@ void leafNodeoperation3B(Address father, int sonPosition)
       }
       leafNodeStore(nodeLeftBrother, leftBrother);
       leafNodeFree(nodeLeftBrother);
+      leafNodeFree(node);
+      node = NULL;
    }
    //guardo o pai e o nó alterados na MS de volta e depois desaloco
    internalNodeStore(nodeFather, father);
-   leafNodeStore(node, sonAddress);
-
    internalNodeFree(nodeFather);
-   leafNodeFree(node);
+
+   if (node) // Verification because of the "killing" of node in 3B with left brother.
+   {
+      leafNodeStore(node, sonAddress);
+      leafNodeFree(node);
+   }
 }
 void internalNodeoperation3B(Address father, int sonPosition)
 {
