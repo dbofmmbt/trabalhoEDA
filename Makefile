@@ -8,5 +8,5 @@ run: build
 clean:
 	rm bin/main
 	rm data/*
-build: clean
+build:
 	$(compiler) $(source) $(flags) $(headers_path) $(security_flags) -o bin/main

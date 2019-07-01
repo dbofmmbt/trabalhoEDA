@@ -69,7 +69,7 @@ void insertOnTree(void *info)
         else
         {
             int i = 0, j;
-            while (i < root->numberOfKeys && id > mainModel.getId(root->info))
+            while (i < root->numberOfKeys && id > mainModel.getId(root->info[i]))
                 i++;
             for (j = root->numberOfKeys; j > i; j--)
                 root->info[j] = root->info[j - 1];
@@ -312,13 +312,13 @@ bool updateOnTree(void *info)
     }
     //usa o getInfoAddress com esse ID para conseguir o endereço da info no arquivo
 
-    FILE *leafFile = fopen(DATA_FILE_PATH, "wb");
+    FILE *leafFile = fopen(DATA_FILE_PATH, "rb+");
     if (!leafFile)
     {
         return false;
     }
     fseek(leafFile, infoAddress, SEEK_SET);
-    fwrite(info, mainModel.infoSize(), 1, leafFile);
+    mainModel.infoSaver(info, leafFile);
     fclose(leafFile);
     return true;
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
@@ -392,7 +392,7 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
     return NULL;
 }
 
-typedef struct ListIDs
+typedef struct listIDs
 {
     int ID;
     struct listIDs *next;
@@ -411,7 +411,7 @@ void *removeAllFromSecIndex(void *secIndex)
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
             if (!strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
             {
-                ListIDs *newListNode = malloc(sizeof(ListIDs));
+                ListIDs *newListNode = (ListIDs *)malloc(sizeof(ListIDs));
                 newListNode->next = list;
                 newListNode->ID = mainModel.getId(leaf->info[i]);
                 list = newListNode;
@@ -427,9 +427,9 @@ void *removeAllFromSecIndex(void *secIndex)
     {
         void *aux = removeFromTree(list->ID);
         mainModel.infoFree(aux);
-        ListIDs *aux = list;
+        ListIDs *tmp = list;
         list = list->next;
-        free(aux);
+        free(tmp);
 
     } while (list)  ;
 

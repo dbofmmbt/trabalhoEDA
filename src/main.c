@@ -83,7 +83,7 @@ int main(int argc, char const *argv[])
             scanf("%s", categoryPizza);
             printf("Novo Preco: ");
             scanf("%f", &pricePizza);
-            Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+            Pizza *p = pizzaCreate(IDPizza, namePizza, categoryPizza, pricePizza);
             updateOnTree(p);
             break;
         }
