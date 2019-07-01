@@ -30,11 +30,14 @@ InfoView mainView = {
 void getInitialParamsAndSetStorage(void)
 {
     char fileName[100];
-    int t;
+    int t = 0;
     printf("Digite o nome do arquivo: ");
     scanf("%s", fileName);
-    printf("Digite o fator de ramificação: ");
-    scanf("%d", &t);
+    while (t < 2)
+    {
+        printf("Digite o fator de ramificação maior que um: ");
+        scanf("%d", &t);
+    }
     setupStorage(fileName, t);
 }
 
@@ -62,7 +65,13 @@ int main(int argc, char const *argv[])
             printf("Categoria: ");
             scanf("%s", categoryPizza);
             printf("Preco: ");
-            scanf("%f", &pricePizza);
+            do
+            {
+                scanf("%f", &pricePizza);
+                if (pricePizza < 0.0)
+                    printf("O valor da pizza nao pode ser negativo.\nDigite um novo valor: ");
+
+            } while (pricePizza < 0.0);
 
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
             insertOnTree(p);
@@ -82,7 +91,14 @@ int main(int argc, char const *argv[])
             printf("Nova Categoria: ");
             scanf("%s", categoryPizza);
             printf("Novo Preco: ");
-            scanf("%f", &pricePizza);
+            do
+            {
+                scanf("%f", &pricePizza);
+                if (pricePizza < 0.0)
+                    printf("O valor da pizza nao pode ser negativo.\nDigite um novo valor: ");
+
+            } while (pricePizza < 0.0);
+
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
             updateOnTree(p);
             break;
