@@ -58,7 +58,7 @@ void leafNodeDivision(Address father, int sonPosition)
 void internalNodeDivision(Address father, int sonPosition)
 {
    InternalNode *fatherNode = internalNodeLoad(father);
-   InternalNode *sonNode = leafNodeLoad(fatherNode->children[sonPosition]);
+   InternalNode *sonNode = internalNodeLoad(fatherNode->children[sonPosition]);
    InternalNode *newInternalNode = internalNodeCreate();
 
    newInternalNode->isPointingToLeaf = sonNode->isPointingToLeaf;
@@ -80,11 +80,11 @@ void internalNodeDivision(Address father, int sonPosition)
    Address newInternalNodeAddress = internalNodeStore(newInternalNode, -1);
    internalNodeStore(sonNode, sonPosition);
 
-   fatherInsertion(&fatherNode, sonPosition, idAux, newInternalNodeAddress);
+   fatherInsertion(fatherNode, sonPosition, idAux, newInternalNodeAddress);
 
-   leafNodeFree(sonNode);
-   leafNodeFree(newInternalNode);
-   internalNodeFree(father);
+   internalNodeFree(sonNode);
+   internalNodeFree(newInternalNode);
+   internalNodeFree(fatherNode);
 }
 
 void leafNodeoperation3A(Address father, int sonPosition)
@@ -201,7 +201,7 @@ void internalNodeoperation3A(Address father, int sonPosition)
       internalNodeStore(nodeRightBrother, rightBrother);
       internalNodeFree(nodeRightBrother);
    }
-   else if (nodeLeftBrother && (nodeLeftBrother->numberOfKeys > (branchingFactor - 1)))
+   else if (nodeHasLeftBrother && (nodeLeftBrother->numberOfKeys > (branchingFactor - 1)))
    {
       Address leftBrother = nodeFather->children[sonPosition - 1];
       nodeLeftBrother = internalNodeLoad(leftBrother);

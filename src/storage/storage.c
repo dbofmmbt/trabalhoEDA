@@ -389,7 +389,7 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
     return NULL;
 }
 
-void *removeAllFromSecIndex(void (*callback)(void *), void *secIndex)
+void *removeAllFromSecIndex(void *(*callback)(int), void *secIndex)
 {
     Address currentNodeAddress = getPossibleLeafAddress(1);
     do
@@ -399,10 +399,13 @@ void *removeAllFromSecIndex(void (*callback)(void *), void *secIndex)
         {
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
             if (strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
-                callback(leaf->info[i]);
-                leafNodeFree(leaf);
-                leaf = leafNodeLoad(currentNodeAddress);
-                i--;
+            {
+                void *aux = callback(mainModel.getId(leaf->info[i]));
+                mainModel.infoFree(aux);
+            }
+            leafNodeFree(leaf);
+            leaf = leafNodeLoad(currentNodeAddress);
+            i--;
         }
 
         currentNodeAddress = leaf->prox;

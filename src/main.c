@@ -125,7 +125,7 @@ int main(int argc, char const *argv[])
             }
             else
             {
-                printf("O objeto %s não foi encontrado", mainView.infoName);
+                printf("O objeto %s não foi encontrado", mainView.infoName(0));
             }
 
             break;
