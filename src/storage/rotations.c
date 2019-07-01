@@ -532,7 +532,7 @@ void internalNodeoperation3B(Address father, int sonPosition)
    if (rBrotherCanBeJoined)
    {
       //carrego o irmão direito do nó
-      Address rightBrother = nodeFather->children[sonPosition+1];
+      Address rightBrother = nodeFather->children[sonPosition + 1];
       InternalNode *nodeRightBrother = internalNodeLoad(rightBrother);
 
       //pego a chave do pai no sonPosition e coloco no final do vetor de chaves do nó
@@ -540,54 +540,55 @@ void internalNodeoperation3B(Address father, int sonPosition)
       node->numberOfKeys++;
 
       //pego todas as chaves e filhos do irmão da direita e coloco no final do nó
-      for(int i = 0; i < nodeRightBrother->numberOfKeys;i++)
-         node->IDs[node->numberOfKeys+i] = nodeRightBrother->IDs[i];
-      for(int i = 0; i < nodeRightBrother->numberOfKeys+1;i++)
-         node->children[node->numberOfKeys+i] = nodeRightBrother->IDs[i];
+      for (int i = 0; i < nodeRightBrother->numberOfKeys; i++)
+         node->IDs[node->numberOfKeys + i] = nodeRightBrother->IDs[i];
+      for (int i = 0; i < nodeRightBrother->numberOfKeys + 1; i++)
+         node->children[node->numberOfKeys + i] = nodeRightBrother->children[i];
 
-      node->numberOfKeys += nodeRightBrother->numberOfKeys + 1;
-      
-      /*tapo o "buraco" que ficou no pai, puxando todos os filhos de sonPosition+1 pra frente e 
+      node->numberOfKeys += nodeRightBrother->numberOfKeys;
+
+      /*tapo o "buraco" que ficou no pai, puxando todos os filhos de sonPosition+1 pra frente e
       as chaves de sonPosition pra frente para a esquerda*/
-      for(int i = sonPosition; i<nodeFather->numberOfKeys; i++)
-         nodeFather->IDs[i] = nodeFather->IDs[i+1];
-      for(int i = sonPosition+1; i<nodeFather->numberOfKeys+1; i++)
-         nodeFather->children[i] = nodeFather->children[i+1];
+      for (int i = sonPosition; i < nodeFather->numberOfKeys - 1; i++)
+         nodeFather->IDs[i] = nodeFather->IDs[i + 1];
+      for (int i = sonPosition + 1; i < nodeFather->numberOfKeys; i++)
+         nodeFather->children[i] = nodeFather->children[i + 1];
 
       nodeFather->numberOfKeys--;
-      
+
       //desaloco o irmão direito, mas não reescrevo alterado para economizar acesso a MS, pois está vazio
       internalNodeFree(nodeRightBrother);
    }
    else if (lBrotherCanBeJoined)
    {
       //aloco irmão da esquerda
-      Address leftBrother = nodeFather->children[sonPosition-1];
+      Address leftBrother = nodeFather->children[sonPosition - 1];
       InternalNode *nodeLeftBrother = internalNodeLoad(leftBrother);
 
       //abro um buraco no nó nas chaves e nos IDs equivalente ao numero de chaves do irmão da esquerda + 1
-      for (int i = node->numberOfKeys+1; i >= 0; i--)
-         node->IDs[nodeLeftBrother->numberOfKeys+i] = node->IDs[i];
-      for (int i = node->numberOfKeys+1; i >= 0; i--)
-         node->children[nodeLeftBrother->numberOfKeys+i] = node->children[i - 1];
+      for (int i = node->numberOfKeys - 1; i >= 0; i--)
+         node->IDs[nodeLeftBrother->numberOfKeys + i + 1] = node->IDs[i];
+      for (int i = node->numberOfKeys; i >= 0; i--)
+         node->children[nodeLeftBrother->numberOfKeys + i + 1] = node->children[i];
 
       //coloco todas as chaves e filhos do irmão da esquerda no nó
-      for(int i = nodeLeftBrother; i<nodeLeftBrother->numberOfKeys;i++)
+      for (int i = 0; i < nodeLeftBrother->numberOfKeys; i++)
          node->IDs[i] = nodeLeftBrother->IDs[i];
-      for(int i = nodeLeftBrother; i<nodeLeftBrother->numberOfKeys+1;i++)
+      for (int i = 0; i < nodeLeftBrother->numberOfKeys + 1; i++)
          node->children[i] = nodeLeftBrother->children[i];
 
       //coloco o ID do pai da posição sonPosition na posição nodeLeftBrother->numberOfKeys no nó
-      node->IDs[nodeLeftBrother->numberOfKeys] = nodeFather->IDs[sonPosition];
+      node->IDs[nodeLeftBrother->numberOfKeys] = nodeFather->IDs[sonPosition - 1];
       //numero de chaves do nó aumenta em nodeLeftBrother->numberOfKeys
-      node->numberOfKeys += nodeLeftBrother->numberOfKeys+1;
-      
-      //puxo todas as chaves e filhos do pai para a esquerda a partir da sonPosition
-      for(int i = sonPosition; i<nodeFather->numberOfKeys; i++)
-         nodeFather->IDs[i] = nodeFather->IDs[i+1];
-      for(int i = sonPosition; i<nodeFather->numberOfKeys+1; i++)
-         nodeFather->children[i] = nodeFather->children[i+1];
+      node->numberOfKeys += nodeLeftBrother->numberOfKeys + 1;
 
+      //puxo todas as chaves e filhos do pai para a esquerda a partir da sonPosition
+      for (int i = sonPosition - 1; i < nodeFather->numberOfKeys - 1; i++)
+         nodeFather->IDs[i] = nodeFather->IDs[i + 1];
+      for (int i = sonPosition - 1; i < nodeFather->numberOfKeys + 1; i++)
+         nodeFather->children[i] = nodeFather->children[i + 1];
+
+      nodeFather->numberOfKeys--;
       //desaloco irmão da esquerda, mas não atualizo ele alterado para a MS
       internalNodeFree(nodeLeftBrother);
    }
