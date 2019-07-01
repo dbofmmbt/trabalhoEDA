@@ -84,7 +84,7 @@ void internalNodeDivision(Address father, int sonPosition)
    sonNode->numberOfKeys = branchingFactor - 1;
 
    Address newInternalNodeAddress = internalNodeStore(newInternalNode, -1);
-   internalNodeStore(sonNode, sonPosition);
+   internalNodeStore(sonNode, fatherNode->children[sonPosition]);
 
    fatherInsertion(fatherNode, sonPosition, idAux, newInternalNodeAddress);
 
