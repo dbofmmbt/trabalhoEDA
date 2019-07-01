@@ -9,8 +9,8 @@
         "metadata.h": "c",
         "info_model.h": "c",
         "unordered_map": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "rotations.h": "c"
     },
-    "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "C_Cpp.default.compilerPath": "usr/bin/gcc -fms-extensions",
 }
