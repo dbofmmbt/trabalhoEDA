@@ -62,8 +62,10 @@ void insertOnTree(void *info)
             leafNodeDivision(newRootAddress, 0);
             meta->rootPosition = newRootAddress;
             meta->rootIsLeaf = false;
+            meta->idCounter--;
             storeMetadata();
             leafNodeFree(root);
+            internalNodeFree(newRoot);
             return insertOnTree(info);
         }
         else
@@ -85,10 +87,25 @@ void insertOnTree(void *info)
     InternalNode *father = loadRoot();
     Address fatherAddress = meta->rootPosition;
 
+    if (father->numberOfKeys == 2 * branchingFactor - 1)
+    {
+        InternalNode *newRoot = internalNodeCreate();
+        newRoot->isPointingToLeaf = false;
+        newRoot->children[0] = fatherAddress;
+        Address newRootAddress = internalNodeStore(newRoot, -1);
+        internalNodeDivision(newRootAddress, 0);
+        meta->rootPosition = newRootAddress;
+        meta->idCounter--;
+        storeMetadata();
+        internalNodeFree(father);
+        internalNodeFree(newRoot);
+        return insertOnTree(info);
+    }
+
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
@@ -117,7 +134,7 @@ void insertOnTree(void *info)
     do
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         leafAddress = father->children[i];
         leaf = leafNodeLoad(leafAddress);
@@ -180,7 +197,7 @@ void *removeFromTree(int id)
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
@@ -230,7 +247,7 @@ void *removeFromTree(int id)
     do
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         leafAddress = father->children[i];
 
@@ -431,7 +448,7 @@ void *removeAllFromSecIndex(void *secIndex)
         list = list->next;
         free(tmp);
 
-    } while (list)  ;
+    } while (list);
 
     return NULL;
 }
@@ -467,7 +484,7 @@ static Address getPossibleFatherAddress(int id)
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
@@ -489,7 +506,7 @@ static Address getPossibleLeafAddress(int id)
 
     InternalNode *father = internalNodeLoad(fatherAddress);
     int i = 0;
-    while (i < father->numberOfKeys && father->IDs[i] < id)
+    while (i < father->numberOfKeys && father->IDs[i] <= id)
         i++;
     Address leafAddress = father->children[i];
     internalNodeFree(father);

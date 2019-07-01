@@ -51,7 +51,7 @@ void leafNodeDivision(Address father, int sonPosition)
 
    Address newLeafNodeAddress = leafNodeStore(newLeafNode, -1);
    sonNode->next = newLeafNodeAddress;
-   leafNodeStore(sonNode, sonPosition);
+   leafNodeStore(sonNode, fatherNode->children[sonPosition]);
 
    fatherInsertion(fatherNode, sonPosition, mainModel.getId(newLeafNode->info[0]), newLeafNodeAddress);
 
@@ -69,7 +69,7 @@ void internalNodeDivision(Address father, int sonPosition)
 
    newInternalNode->isPointingToLeaf = sonNode->isPointingToLeaf;
 
-   int idAux = sonNode->IDs[branchingFactor];
+   int idAux = sonNode->IDs[branchingFactor - 1];
 
    for (int i = branchingFactor; i < ((branchingFactor * 2)); i++)
       newInternalNode->children[newInternalNode->numberOfKeys++] = sonNode->children[i];
@@ -88,6 +88,7 @@ void internalNodeDivision(Address father, int sonPosition)
 
    fatherInsertion(fatherNode, sonPosition, idAux, newInternalNodeAddress);
 
+   internalNodeStore(fatherNode, father);
    internalNodeFree(sonNode);
    internalNodeFree(newInternalNode);
    internalNodeFree(fatherNode);
