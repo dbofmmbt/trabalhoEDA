@@ -209,7 +209,7 @@ void *removeFromTree(int id)
         {
             bool operated = false;
 
-            if (i < father->numberOfKeys - 1)
+            if (i < father->numberOfKeys)
             {
                 InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
                 if (rightBrother->numberOfKeys >= branchingFactor)
@@ -260,7 +260,7 @@ void *removeFromTree(int id)
         {
             bool operated = false;
 
-            if (i < father->numberOfKeys - 1)
+            if (i < father->numberOfKeys)
             {
                 LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
                 if (rightBrother->numberOfKeys >= branchingFactor)

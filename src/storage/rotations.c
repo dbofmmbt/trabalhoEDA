@@ -294,7 +294,7 @@ void rootOperation3B(Address father, int sonPosition)
    if (root->isPointingToLeaf)
    {
       LeafNode *son = leafNodeLoad(root->children[sonPosition]);
-      if (sonPosition < root->numberOfKeys - 1) // Join with right brother
+      if (sonPosition < root->numberOfKeys) // Join with right brother
       {
          int i;
          LeafNode *rightBrother = leafNodeLoad(root->children[sonPosition + 1]);
@@ -358,7 +358,7 @@ void rootOperation3B(Address father, int sonPosition)
    else // Root points to Internal Node
    {
       InternalNode *son = internalNodeLoad(root->children[sonPosition]);
-      if (sonPosition < root->numberOfKeys - 1) // Join with the right brother
+      if (sonPosition < root->numberOfKeys) // Join with the right brother
       {
          int i;
          InternalNode *rightBrother = internalNodeLoad(root->children[sonPosition + 1]);
@@ -443,7 +443,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
    Address sonAddress = nodeFather->children[sonPosition];
    node = leafNodeLoad(sonAddress);
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)
@@ -512,7 +512,7 @@ void internalNodeoperation3B(Address father, int sonPosition)
    Address sonAddress = nodeFather->children[sonPosition];
    node = internalNodeLoad(sonAddress);
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)

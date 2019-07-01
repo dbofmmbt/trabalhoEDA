@@ -10,8 +10,9 @@ void pizzaPrint(void *v)
 Pizza *pizzaCreate(int id, char *name, char *category, float price)
 {
 	Pizza *p = (Pizza *)malloc(sizeof(Pizza));
-	if (p)
-		memset(p, 0, sizeof(Pizza));
+	if (!p)
+		return p;
+	memset(p, 0, sizeof(Pizza));
 	p->id = id;
 	strcpy(p->name, name);
 	strcpy(p->category, category);
@@ -22,6 +23,8 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 
 void pizzaSave(void *v, FILE *out)
 {
+	if (!v)
+		return;
 	Pizza *p = (Pizza *)v;
 	fwrite(&p->id, sizeof(int), 1, out);
 	fwrite(p->name, sizeof(char), sizeof(p->name), out);
@@ -33,6 +36,8 @@ void pizzaSave(void *v, FILE *out)
 void *pizzaRead(FILE *in)
 {
 	Pizza *p = (Pizza *)malloc(sizeof(Pizza));
+	if (!p)
+		return p;
 	if (0 >= fread(&p->id, sizeof(int), 1, in))
 	{
 		free(p);
@@ -81,7 +86,8 @@ int pizzaSize(void)
 
 void pizzaFree(void *p)
 {
-	free(p);
+	if (p)
+		free(p);
 }
 
 int pizzaGetId(void *v)
