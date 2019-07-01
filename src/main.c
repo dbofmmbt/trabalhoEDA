@@ -53,14 +53,14 @@ int main(int argc, char const *argv[])
         {
         case 1: //Adicionar pizza
         {
-            char *namePizza;
-            char *categoryPizza;
+            char namePizza[100];
+            char categoryPizza[100];
             float pricePizza;
 
             printf("Nome: ");
-            scanf("%s", &namePizza);
+            scanf("%s", namePizza);
             printf("Categoria: ");
-            scanf("%s", &categoryPizza);
+            scanf("%s", categoryPizza);
             printf("Preco: ");
             scanf("%f", &pricePizza);
 
@@ -71,16 +71,16 @@ int main(int argc, char const *argv[])
         case 3: //Alterar pizza
         {
             int IDPizza;
-            char *namePizza;
-            char *categoryPizza;
+            char namePizza[100];
+            char categoryPizza[100];
             float pricePizza;
 
             printf("ID da pizza a ser alterada: ");
             scanf("%d", &IDPizza);
             printf("Novo Nome: ");
-            scanf("%s", &namePizza);
+            scanf("%s", namePizza);
             printf("Nova Categoria: ");
-            scanf("%s", &categoryPizza);
+            scanf("%s", categoryPizza);
             printf("Novo Preco: ");
             scanf("%f", &pricePizza);
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
@@ -97,9 +97,9 @@ int main(int argc, char const *argv[])
         }
         case 6: //Remover categoria e todas as pizza da categoria
         {
-            char *categoryPizza;
+            char categoryPizza[100];
             printf("Categoria a ser removida: ");
-            scanf("%s", &categoryPizza);
+            scanf("%s", categoryPizza);
             removeAllFromSecIndex(removeFromTree, categoryPizza);
             break;
         }
@@ -132,9 +132,9 @@ int main(int argc, char const *argv[])
         }
         case 9: //Listar pizzas de uma categoria
         {
-            char *secIndex;
+            char secIndex[100];
             printf("Categoria a ser listada: ");
-            scanf("%s", &secIndex);
+            scanf("%s", secIndex);
             printAllFromSecIndex(pizzaPrint, secIndex);
             break;
         }
