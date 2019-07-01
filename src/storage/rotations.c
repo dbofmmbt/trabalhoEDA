@@ -254,7 +254,12 @@ void operation3A(Address father, int sonPosition)
 void operation3B(Address father, int sonPosition)
 {
    InternalNode *nodeFather = internalNodeLoad(father);
-   if (nodeFather->isPointingToLeaf)
+
+   if (father == meta->rootPosition)
+   {
+      rootOperation3B(father, sonPosition);
+   }
+   else if (nodeFather->isPointingToLeaf)
    {
       leafNodeoperation3B(father, sonPosition);
    }
@@ -264,6 +269,79 @@ void operation3B(Address father, int sonPosition)
    }
    internalNodeFree(nodeFather);
 }
+
+void rootOperation3B(father, sonPosition)
+{
+   InternalNode *root = internalNodeLoad(father);
+
+   if (root->isPointingToLeaf)
+   {
+      LeafNode *son = leafNodeLoad(root->children[sonPosition]);
+      if (sonPosition < root->numberOfKeys - 1) // Join with right brother
+      {
+         int i;
+         LeafNode *rightBrother = leafNodeLoad(root->children[sonPosition + 1]);
+         for (i = 0; i < rightBrother->numberOfKeys; i++)
+         {
+            son->info[son->numberOfKeys + i] = rightBrother->info[i];
+         }
+         son->prox = rightBrother->prox;
+         son->numberOfKeys += rightBrother->numberOfKeys;
+
+         for (i = sonPosition; i < root->numberOfKeys - 1; i++)
+         {
+            root->IDs[i] = root->IDs[i + 1];
+            root->children[i + 1] = root->children[i + 2];
+         }
+         root->numberOfKeys--;
+         leafNodeFree(rightBrother);
+      }
+      else if (sonPosition > 0) // Join with left brother
+      {
+         int i;
+         LeafNode *leftBrother = leafNodeLoad(root->children[sonPosition - 1]);
+         for (i = 0; i < son->numberOfKeys; i++)
+         {
+            leftBrother->info[leftBrother->numberOfKeys + i] = son->info[i];
+         }
+         leftBrother->prox = son->prox;
+         leftBrother->numberOfKeys += son->numberOfKeys;
+
+         for (i = sonPosition - 1; i < root->numberOfKeys - 1; i++)
+         {
+            root->IDs[i] = root->IDs[i + 1];
+            root->children[i + 1] = root->children[i + 2];
+         }
+         sonPosition--;
+         root->numberOfKeys--;
+         // The son became the leftBrother.
+         LeafNode *aux = son;
+         son = leftBrother;
+         leafNodeFree(aux);
+      }
+      else // If the operation isn't possible...
+      {
+         internalNodeFree(root);
+         leafNodeFree(son);
+         return;
+      }
+
+      if (root->numberOfKeys == 0)
+      {
+         meta->rootPosition = root->children[0];
+         meta->rootIsLeaf = true;
+         storeMetadata();
+      }
+   }
+   else
+   {
+      InternalNode *son = internalNodeLoad(root->children[sonPosition]);
+      if (true) // TODO
+      {
+      }
+   }
+}
+
 void leafNodeoperation3B(Address father, int sonPosition)
 {
    InternalNode *nodeFather;
@@ -384,7 +462,6 @@ void internalNodeoperation3B(Address father, int sonPosition)
       //pego a chave do pai no sonPosition e coloco no final do vetor de chaves do nó
       //pego todas as chaves e filhos do irmão da direita e coloco no final do nó
       //
-
    }
    else if (lBrotherCanBeJoined)
    {
