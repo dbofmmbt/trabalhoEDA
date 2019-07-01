@@ -450,7 +450,7 @@ void *removeAllFromSecIndex(void *secIndex)
 
     } while (currentNodeAddress != -1);
 
-    do
+    while (list)
     {
         void *aux = removeFromTree(list->ID);
         mainModel.infoFree(aux);
@@ -458,7 +458,7 @@ void *removeAllFromSecIndex(void *secIndex)
         list = list->next;
         free(tmp);
 
-    } while (list);
+    }
 
     return NULL;
 }
@@ -524,87 +524,6 @@ static Address getPossibleLeafAddress(int id)
     return leafAddress;
 }
 
-/*
-void printTreeRec(InternalNode *node, int deepness)
-{
-    if (!node->isPointingToLeaf)
-    {
-        InternalNode *son;
-        int i;
-        for (i = 0; i < node->numberOfKeys; i++)
-        {
-            son = internalNodeLoad(node->children[i]);
-            printTreeRec(son, deepness + 1);
-            internalNodeFree(son);
-            for (int j = 0; j <= deepness; j++)
-                printf("    ");
-            printf("%d\n", node->IDs[i]);
-        }
-        son = internalNodeLoad(node->children[i]);
-        printTreeRec(son, deepness + 1);
-        internalNodeFree(son);
-    }
-    else
-    {
-        int i;
-        LeafNode *son;
-        for (i = 0; i < node->numberOfKeys; i++)
-        {
-            son = leafNodeLoad(node->children[i]);
-
-            for (int j = 0; j < son->numberOfKeys; j++)
-            {
-                int id = mainModel.getId(son->info[j]);
-
-                for (int k = 0; k <= deepness + 1; k++)
-                    printf("    ");
-                printf("%d\n", id);
-            }
-            leafNodeFree(son);
-
-            for (i = 0; i < node->numberOfKeys; i++)
-            {
-                for (int j = 0; j <= deepness; j++)
-                    printf("    ");
-                printf("%d\n", node->IDs[i]);
-            }
-
-            son = leafNodeLoad(node->children[i+1]);
-
-            for (int j = 0; j < son->numberOfKeys; j++)
-            {
-                int id = mainModel.getId(son->info[j]);
-
-                for (int k = 0; k <= deepness + 1; k++)
-                    printf("    ");
-                printf("%d\n", id);
-            }
-        }
-    }
-    internalNodeFree(node);
-}
-
-void printTree(void)
-{
-    printf("\n\n\n");
-    if (meta->rootIsLeaf)
-    {
-        LeafNode *root = leafNodeLoad(meta->rootPosition);
-        for (int i = 0; i < root->numberOfKeys; i++)
-        {
-            int id = mainModel.getId(root->info[i]);
-            printf("%d\n", id);
-        }
-        leafNodeFree(root);
-        printf("\n\n\n");
-        return;
-    }
-
-    InternalNode *root = internalNodeLoad(meta->rootPosition);
-    printTreeRec(root, 0); // This function is going to free the memory.
-    printf("\n\n\n");
-}
-*/
 void printTree()
 {
     if (!meta->quantityInfos)
