@@ -109,7 +109,7 @@ void leafNodeoperation3A(Address father, int sonPosition)
    if (node->numberOfKeys > (branchingFactor - 1))
       return;
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    //se o irmão a direita existir, vê se ele tem + que t chaves
@@ -185,7 +185,7 @@ void internalNodeoperation3A(Address father, int sonPosition)
    if (node->numberOfKeys > (branchingFactor - 1))
       return;
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)
