@@ -326,19 +326,91 @@ void rootOperation3B(father, sonPosition)
          return;
       }
 
+      leafNodeStore(son, root->children[sonPosition]);
+      leafNodeFree(son);
+
       if (root->numberOfKeys == 0)
       {
          meta->rootPosition = root->children[0];
          meta->rootIsLeaf = true;
          storeMetadata();
+         internalNodeFree(root);
+         root = NULL;
       }
    }
-   else
+   else // Root points to Internal Node
    {
       InternalNode *son = internalNodeLoad(root->children[sonPosition]);
-      if (true) // TODO
+      if (sonPosition < root->numberOfKeys - 1) // Join with the right brother
       {
+         int i;
+         InternalNode *rightBrother = internalNodeLoad(root->children[sonPosition + 1]);
+         son->IDs[son->numberOfKeys++] = root->IDs[sonPosition];
+         for (i = 0; i < rightBrother->numberOfKeys; i++)
+         {
+            son->children[son->numberOfKeys + i] = rightBrother->children[i];
+            son->IDs[son->numberOfKeys + i] = rightBrother->IDs[i];
+         }
+         // Adding the last Child from right brother
+         son->children[son->numberOfKeys + i] = rightBrother->children[i];
+         son->numberOfKeys += rightBrother->numberOfKeys;
+
+         for (i = sonPosition; i < root->numberOfKeys - 1; i++)
+         {
+            root->IDs[i] = root->IDs[i + 1];
+            root->children[i + 1] = root->children[i + 2];
+         }
+         root->numberOfKeys--;
+         internalNodeFree(rightBrother);
       }
+      else if (sonPosition > 0) // Join with left brother
+      {
+         int i;
+         InternalNode *leftBrother = internalNodeLoad(root->children[sonPosition - 1]);
+         leftBrother->IDs[leftBrother->numberOfKeys++] = root->IDs[sonPosition - 1];
+         for (i = 0; i < son->numberOfKeys; i++)
+         {
+            leftBrother->children[leftBrother->numberOfKeys + i] = son->children[i];
+            leftBrother->IDs[leftBrother->numberOfKeys + i] = son->IDs[i];
+         }
+         // Adding the last Child from the son
+         leftBrother->children[leftBrother->numberOfKeys + i] = son->children[i];
+         leftBrother->numberOfKeys += son->numberOfKeys;
+
+         for (i = sonPosition - 1; i < root->numberOfKeys - 1; i++)
+         {
+            root->IDs[i] = root->IDs[i + 1];
+            root->children[i + 1] = root->children[i + 2];
+         }
+         sonPosition--;
+         root->numberOfKeys--;
+         // The son became the leftBrother.
+         InternalNode *aux = son;
+         son = leftBrother;
+         internalNodeFree(aux);
+      }
+      else // If the operation isn't possible...
+      {
+         internalNodeFree(root);
+         internalNodeFree(son);
+         return;
+      }
+
+      internalNodeStore(son, root->children[sonPosition]);
+      internalNodeFree(son);
+
+      if (root->numberOfKeys == 0)
+      {
+         meta->rootPosition = root->children[0];
+         storeMetadata();
+         internalNodeFree(root);
+         root = NULL;
+      }
+   }
+   if (root)
+   {
+      internalNodeStore(root, father);
+      internalNodeFree(root);
    }
 }
 
