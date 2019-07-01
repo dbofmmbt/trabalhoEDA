@@ -21,6 +21,11 @@ extern Metadata *meta;
            chave do pai para o nó intercalado.
 */
 
+
+static void rootOperation3B(Address, int);
+static void leafNodeoperation3B(Address, int);
+static void internalNodeoperation3B(Address, int);
+
 static void fatherInsertion(InternalNode *father, int sonPosition, int newKey, Address newNodeAddress)
 {
    for (int i = father->numberOfKeys; i > sonPosition; i--)
@@ -270,7 +275,7 @@ void operation3B(Address father, int sonPosition)
    internalNodeFree(nodeFather);
 }
 
-void rootOperation3B(father, sonPosition)
+void rootOperation3B(Address father, int sonPosition)
 {
    InternalNode *root = internalNodeLoad(father);
 
@@ -484,7 +489,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
          Address lBrotherOfLBrother = nodeFather->children[sonPosition - 2];
          LeafNode *lBrotherOfNodeLBrother = leafNodeLoad(lBrotherOfLBrother);
          lBrotherOfNodeLBrother->prox = nodeLeftBrother->prox;
-         leafNodeStore(lBrotherOfLBrother, lBrotherOfLBrother);
+         leafNodeStore(lBrotherOfNodeLBrother, lBrotherOfLBrother);
          leafNodeFree(lBrotherOfNodeLBrother);
       }
 
