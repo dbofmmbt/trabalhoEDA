@@ -480,31 +480,15 @@ void leafNodeoperation3B(Address father, int sonPosition)
 
       if (nodeLeftBrother->numberOfKeys <= (branchingFactor - 1))
       {
-         //anda com todas as chaves e infos do nó para a direita tantas vezes quanto o numero de chaves do irmão esquerdo
-         for (int i = node->numberOfKeys - 1; i >= 0; i--)
-            node->info[i + nodeLeftBrother->numberOfKeys] = node->info[i];
-         //coloco os todas as chaves e filhos do irmão esquerdo na mesma posição, só que no nó
-         for (int i = 0; i < nodeLeftBrother->numberOfKeys; i++)
-            node->info[i] = nodeLeftBrother->info[i];
-         //numero de chaves no nó aumenta no numero de chaves do irmão esquerdo
-         node->numberOfKeys += nodeLeftBrother->numberOfKeys;
+         for (int i = 0; i < node->numberOfKeys; i++)
+            nodeLeftBrother->info[i + nodeLeftBrother->numberOfKeys] = node->info[i];
 
-         //se o irmão esquerdo tiver um irmão esquerdo, o nextimo dele se torna o nó(próximo do irmão esquerdo do nó)
-         bool lBrotherHasLBrother = ((sonPosition - 1) > 0);
-
-         if (lBrotherHasLBrother)
-         {
-            Address lBrotherOfLBrother = nodeFather->children[sonPosition - 2];
-            LeafNode *lBrotherOfNodeLBrother = leafNodeLoad(lBrotherOfLBrother);
-            lBrotherOfNodeLBrother->next = nodeLeftBrother->next;
-            leafNodeStore(lBrotherOfNodeLBrother, lBrotherOfLBrother);
-            leafNodeFree(lBrotherOfNodeLBrother);
-         }
-
+         nodeLeftBrother->numberOfKeys += node->numberOfKeys;
+         nodeLeftBrother->next = node->next;
          // a partir do ID na posição sonPosition  e o filho sonPosition+1 do pai, todo mundo anda pra esquerda
          for (int i = sonPosition - 1; i < nodeFather->numberOfKeys - 1; i++)
             nodeFather->IDs[i] = nodeFather->IDs[i + 1];
-         for (int i = sonPosition - 1; i < nodeFather->numberOfKeys; i++)
+         for (int i = sonPosition; i < nodeFather->numberOfKeys; i++)
             nodeFather->children[i] = nodeFather->children[i + 1];
 
          //decremento a quantidade de chaves do pai

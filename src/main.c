@@ -56,7 +56,6 @@ int main(int argc, char const *argv[])
         {
         case 1: //Adicionar pizza
         {
-            /*
             char namePizza[100];
             char categoryPizza[100];
             float pricePizza;
@@ -67,8 +66,6 @@ int main(int argc, char const *argv[])
             printf("Preco: ");
             scanf("%f", &pricePizza);
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
-             */
-            Pizza *p = pizzaCreate(0, "adawdawda", "adaw", 1.0);
             insertOnTree(p);
             forEachInfo(mainView.infoPrint);
             break;
