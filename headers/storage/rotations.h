@@ -4,8 +4,7 @@
 #define ROTATIONS_H
 
 #include <utils.h>
-#include <storage/leaf_node.h>
-#include <storage/internal_node.h>
+#include <storage/storage.h>
 
 void leafNodeDivision(Address father, int sonPosition);
 
