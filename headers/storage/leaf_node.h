@@ -7,7 +7,7 @@ typedef struct leafNode
 {
     int numberOfKeys;
     void **info;
-    Address prox;
+    Address next;
 } LeafNode;
 
 LeafNode *leafNodeCreate();

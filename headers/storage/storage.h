@@ -24,6 +24,6 @@ void *forEachInfo(void (*callback)(void *));
 
 void *printAllFromSecIndex(void (*callback)(void *), void *secIndex);
 
-void *removeAllFromSecIndex(void *(*callback)(int), void *secIndex);
+void *removeAllFromSecIndex(void *secIndex);
 
 #endif

@@ -43,14 +43,14 @@ void leafNodeDivision(Address father, int sonPosition)
    LeafNode *sonNode = leafNodeLoad(fatherNode->children[sonPosition]);
    LeafNode *newLeafNode = leafNodeCreate();
 
-   newLeafNode->prox = sonNode->prox;
+   newLeafNode->next = sonNode->next;
    for (int i = branchingFactor; i < ((branchingFactor * 2)); i++)
       newLeafNode->info[newLeafNode->numberOfKeys++] = sonNode->info[i];
 
    sonNode->numberOfKeys = branchingFactor - 1;
 
    Address newLeafNodeAddress = leafNodeStore(newLeafNode, -1);
-   sonNode->prox = newLeafNodeAddress;
+   sonNode->next = newLeafNodeAddress;
    leafNodeStore(sonNode, sonPosition);
 
    fatherInsertion(fatherNode, sonPosition, mainModel.getId(newLeafNode->info[0]), newLeafNodeAddress);
@@ -290,7 +290,7 @@ void rootOperation3B(Address father, int sonPosition)
          {
             son->info[son->numberOfKeys + i] = rightBrother->info[i];
          }
-         son->prox = rightBrother->prox;
+         son->next = rightBrother->next;
          son->numberOfKeys += rightBrother->numberOfKeys;
 
          for (i = sonPosition; i < root->numberOfKeys - 1; i++)
@@ -309,7 +309,7 @@ void rootOperation3B(Address father, int sonPosition)
          {
             leftBrother->info[leftBrother->numberOfKeys + i] = son->info[i];
          }
-         leftBrother->prox = son->prox;
+         leftBrother->next = son->next;
          leftBrother->numberOfKeys += son->numberOfKeys;
 
          for (i = sonPosition - 1; i < root->numberOfKeys - 1; i++)
@@ -453,7 +453,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
       //numero de chaves no nó aumenta no numero de chaves do irmão direito
       node->numberOfKeys += nodeRightBrother->numberOfKeys;
       //próximo do nó se torna o próximo do irmão da direita
-      node->prox = nodeRightBrother->prox;
+      node->next = nodeRightBrother->next;
 
       // a partir do ID na posição sonPosition e o filho sonPosition+1 do pai, todo mundo anda pra esquerda
       for (int i = sonPosition; i < nodeFather->numberOfKeys - 1; i++)
@@ -481,14 +481,14 @@ void leafNodeoperation3B(Address father, int sonPosition)
       //numero de chaves no nó aumenta no numero de chaves do irmão esquerdo
       node->numberOfKeys += nodeLeftBrother->numberOfKeys;
 
-      //se o irmão esquerdo tiver um irmão esquerdo, o proximo dele se torna o nó(próximo do irmão esquerdo do nó)
+      //se o irmão esquerdo tiver um irmão esquerdo, o nextimo dele se torna o nó(próximo do irmão esquerdo do nó)
       bool lBrotherHasLBrother = ((sonPosition - 1) > 0);
 
       if (lBrotherHasLBrother)
       {
          Address lBrotherOfLBrother = nodeFather->children[sonPosition - 2];
          LeafNode *lBrotherOfNodeLBrother = leafNodeLoad(lBrotherOfLBrother);
-         lBrotherOfNodeLBrother->prox = nodeLeftBrother->prox;
+         lBrotherOfNodeLBrother->next = nodeLeftBrother->next;
          leafNodeStore(lBrotherOfNodeLBrother, lBrotherOfLBrother);
          leafNodeFree(lBrotherOfNodeLBrother);
       }

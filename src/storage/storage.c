@@ -363,7 +363,7 @@ void *forEachInfo(void (*callback)(void *))
         {
             callback(leaf->info[i]);
         }
-        currentNodeAddress = leaf->prox;
+        currentNodeAddress = leaf->next;
         leafNodeFree(leaf);
     } while (currentNodeAddress != -1);
 
@@ -379,39 +379,56 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
         for (int i = 0; i < leaf->numberOfKeys; i++)
         {
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
-            if (strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
+            if (!strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
                 callback(leaf->info[i]);
         }
-        currentNodeAddress = leaf->prox;
+        currentNodeAddress = leaf->next;
         leafNodeFree(leaf);
     } while (currentNodeAddress != -1);
 
     return NULL;
 }
 
-void *removeAllFromSecIndex(void *(*callback)(int), void *secIndex)
+typedef struct ListIDs
+{
+    int ID;
+    struct listIDs *next;
+} ListIDs;
+
+void *removeAllFromSecIndex(void *secIndex)
 {
     Address currentNodeAddress = getPossibleLeafAddress(1);
+    ListIDs *list = NULL;
+
     do
     {
         LeafNode *leaf = leafNodeLoad(currentNodeAddress);
         for (int i = 0; i < leaf->numberOfKeys; i++)
         {
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
-            if (strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
+            if (!strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
             {
-                void *aux = callback(mainModel.getId(leaf->info[i]));
-                mainModel.infoFree(aux);
+                ListIDs *newListNode = malloc(sizeof(ListIDs));
+                newListNode->next = list;
+                newListNode->ID = mainModel.getId(leaf->info[i]);
+                list = newListNode;
             }
-            leafNodeFree(leaf);
-            leaf = leafNodeLoad(currentNodeAddress);
-            i--;
         }
 
-        currentNodeAddress = leaf->prox;
+        currentNodeAddress = leaf->next;
         leafNodeFree(leaf);
 
     } while (currentNodeAddress != -1);
+
+    do
+    {
+        void *aux = removeFromTree(list->ID);
+        mainModel.infoFree(aux);
+        ListIDs *aux = list;
+        list = list->next;
+        free(aux);
+
+    } while (list)  ;
 
     return NULL;
 }

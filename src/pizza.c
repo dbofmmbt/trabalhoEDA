@@ -76,7 +76,7 @@ int pizzaSize(void)
 		   sizeof(char) * 50 + // name
 		   sizeof(char) * 20 + // categoria
 		   sizeof(float) +	 // preço
-		   sizeof(int);		   // proximoElementoCategoria
+		   sizeof(int);		   // nextimoElementoCategoria
 }
 
 void pizzaFree(void *p)

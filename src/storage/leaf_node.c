@@ -11,7 +11,7 @@ LeafNode *leafNodeCreate(void)
 
     leaf->numberOfKeys = 0;
     leaf->info = malloc(sizeof(void *) * branchingFactor * 2 - 1);
-    leaf->prox = -1;
+    leaf->next = -1;
 
     return leaf;
 }
@@ -39,7 +39,7 @@ Address leafNodeStore(LeafNode *node, Address pos)
     int maxNumberKeys = branchingFactor * 2 - 1;
     fwrite("0", sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
 
-    fwrite(&node->prox, sizeof(int), 1, f);
+    fwrite(&node->next, sizeof(int), 1, f);
     fclose(f);
     return pos;
 }
@@ -58,7 +58,7 @@ LeafNode *leafNodeLoad(Address pos)
     int maxNumberKeys = branchingFactor * 2 - 1;
     fseek(f, mainModel.infoSize() * (maxNumberKeys - leaf->numberOfKeys), SEEK_CUR);
 
-    fread(&leaf->prox, sizeof(Address), 1, f);
+    fread(&leaf->next, sizeof(Address), 1, f);
 
     fclose(f);
     return leaf;

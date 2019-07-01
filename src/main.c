@@ -100,7 +100,7 @@ int main(int argc, char const *argv[])
             char categoryPizza[100];
             printf("Categoria a ser removida: ");
             scanf("%s", categoryPizza);
-            removeAllFromSecIndex(removeFromTree, categoryPizza);
+            removeAllFromSecIndex(categoryPizza);
             break;
         }
         case 7: //Listar todas as pizzas
