@@ -126,13 +126,13 @@ void leafNodeoperation3A(Address father, int sonPosition)
          node->numberOfKeys++;
 
          //tira primeiro filho do irmão a direita e anda com as outras infos pra esquerda (tapando o buraco)
-         for (int i = 1; i < nodeRightBrother->numberOfKeys; i++)
-            nodeRightBrother->info[i - 1] = nodeRightBrother->info[i];
+         for (int i = 0; i < nodeRightBrother->numberOfKeys - 1; i++)
+            nodeRightBrother->info[i] = nodeRightBrother->info[i + 1];
          //decrementa numero de chaves do irmão a direita
          nodeRightBrother->numberOfKeys--;
          //pega o id do primeiro filho do irmão da direita e poe no pai
          int newFatherID = mainModel.getId((nodeRightBrother->info[0]));
-         nodeFather->IDs[sonPosition + 1] = newFatherID;
+         nodeFather->IDs[sonPosition] = newFatherID;
       }
 
       leafNodeStore(nodeRightBrother, rightBrother);
@@ -157,7 +157,7 @@ void leafNodeoperation3A(Address father, int sonPosition)
          nodeLeftBrother->numberOfKeys--;
          //pegar o id do primeiro filho do nó e colocar no pai
          int newFatherID = mainModel.getId((node->info[0]));
-         nodeFather->IDs[sonPosition] = newFatherID;
+         nodeFather->IDs[sonPosition - 1] = newFatherID;
       }
 
       leafNodeStore(nodeLeftBrother, leftBrother);
