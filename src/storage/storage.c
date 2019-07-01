@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include <storage.h>
 #include <stdarg.h>
 
@@ -14,11 +13,14 @@ static void *loadRoot(void);
 void setupStorage(char *catalogName, int degree)
 {
     branchingFactor = degree;
-    if (access(METADATA_FILE_PATH, F_OK)) // If it exists, there's no need to setup the Store.
+    FILE *f = fopen(METADATA_FILE_PATH, "rb");
+    if (f) // If it exists, there's no need to setup the Store.
     {
         loadMetadata();
+        fclose(f);
         return;
     }
+
     meta = initMetadata(degree);
     storeMetadata();
 
@@ -44,7 +46,7 @@ void setupStorage(char *catalogName, int degree)
 void insertOnTree(void *info)
 {
     loadMetadata();
-    int id = meta->idCounter++;
+    int id = ++meta->idCounter;
     meta->quantityInfos++;
     mainModel.setId(info, id);
 
@@ -75,6 +77,7 @@ void insertOnTree(void *info)
             root->numberOfKeys++;
             leafNodeStore(root, meta->rootPosition);
             leafNodeFree(root);
+            storeMetadata();
             return;
         }
     }

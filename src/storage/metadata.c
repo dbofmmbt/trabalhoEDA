@@ -26,7 +26,7 @@ Metadata *initMetadata(int branchingFactor)
     Metadata *m = (Metadata *)malloc(sizeof(Metadata));
     m->idCounter = 0;
     m->branchingFactor = branchingFactor;
-    m->rootIsLeaf = false;
+    m->rootIsLeaf = true;
     m->rootPosition = 0;
     m->quantityInfos = 0;
     return m;
