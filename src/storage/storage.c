@@ -62,14 +62,16 @@ void insertOnTree(void *info)
             leafNodeDivision(newRootAddress, 0);
             meta->rootPosition = newRootAddress;
             meta->rootIsLeaf = false;
+            meta->idCounter--;
             storeMetadata();
             leafNodeFree(root);
+            internalNodeFree(newRoot);
             return insertOnTree(info);
         }
         else
         {
             int i = 0, j;
-            while (i < root->numberOfKeys && id > mainModel.getId(root->info))
+            while (i < root->numberOfKeys && id > mainModel.getId(root->info[i]))
                 i++;
             for (j = root->numberOfKeys; j > i; j--)
                 root->info[j] = root->info[j - 1];
@@ -85,10 +87,25 @@ void insertOnTree(void *info)
     InternalNode *father = loadRoot();
     Address fatherAddress = meta->rootPosition;
 
+    if (father->numberOfKeys == 2 * branchingFactor - 1)
+    {
+        InternalNode *newRoot = internalNodeCreate();
+        newRoot->isPointingToLeaf = false;
+        newRoot->children[0] = fatherAddress;
+        Address newRootAddress = internalNodeStore(newRoot, -1);
+        internalNodeDivision(newRootAddress, 0);
+        meta->rootPosition = newRootAddress;
+        meta->idCounter--;
+        storeMetadata();
+        internalNodeFree(father);
+        internalNodeFree(newRoot);
+        return insertOnTree(info);
+    }
+
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
@@ -117,7 +134,7 @@ void insertOnTree(void *info)
     do
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         leafAddress = father->children[i];
         leaf = leafNodeLoad(leafAddress);
@@ -180,7 +197,7 @@ void *removeFromTree(int id)
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
@@ -216,6 +233,7 @@ void *removeFromTree(int id)
         {
             internalNodeFree(father);
             father = son;
+            fatherAddress = sonAddress;
             continue;
         }
         // The son needed operations. Therefore, the father must be accessed again.
@@ -230,7 +248,7 @@ void *removeFromTree(int id)
     do
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         leafAddress = father->children[i];
 
@@ -312,13 +330,13 @@ bool updateOnTree(void *info)
     }
     //usa o getInfoAddress com esse ID para conseguir o endereço da info no arquivo
 
-    FILE *leafFile = fopen(DATA_FILE_PATH, "wb");
+    FILE *leafFile = fopen(DATA_FILE_PATH, "rb+");
     if (!leafFile)
     {
         return false;
     }
     fseek(leafFile, infoAddress, SEEK_SET);
-    fwrite(info, mainModel.infoSize(), 1, leafFile);
+    mainModel.infoSaver(info, leafFile);
     fclose(leafFile);
     return true;
     //substituir a informação antiga no arquivo pela nova (com excessão do ID)
@@ -392,7 +410,7 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
     return NULL;
 }
 
-typedef struct ListIDs
+typedef struct listIDs
 {
     int ID;
     struct listIDs *next;
@@ -411,7 +429,7 @@ void *removeAllFromSecIndex(void *secIndex)
             //TODO para melhorar a generaização SecIndex deve ter a possibilidade de ser de outros tipos além de string
             if (!strcmp(mainModel.getSecIndex(leaf->info[i]), secIndex))
             {
-                ListIDs *newListNode = malloc(sizeof(ListIDs));
+                ListIDs *newListNode = (ListIDs *)malloc(sizeof(ListIDs));
                 newListNode->next = list;
                 newListNode->ID = mainModel.getId(leaf->info[i]);
                 list = newListNode;
@@ -427,11 +445,11 @@ void *removeAllFromSecIndex(void *secIndex)
     {
         void *aux = removeFromTree(list->ID);
         mainModel.infoFree(aux);
-        ListIDs *aux = list;
+        ListIDs *tmp = list;
         list = list->next;
-        free(aux);
+        free(tmp);
 
-    } while (list)  ;
+    } while (list);
 
     return NULL;
 }
@@ -467,13 +485,14 @@ static Address getPossibleFatherAddress(int id)
     while (!father->isPointingToLeaf)
     {
         int i = 0;
-        while (i < father->numberOfKeys && father->IDs[i] < id)
+        while (i < father->numberOfKeys && father->IDs[i] <= id)
             i++;
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
 
         internalNodeFree(father);
         father = son;
+        fatherAddress = sonAddress;
     }
     internalNodeFree(father);
     return fatherAddress;
@@ -489,9 +508,91 @@ static Address getPossibleLeafAddress(int id)
 
     InternalNode *father = internalNodeLoad(fatherAddress);
     int i = 0;
-    while (i < father->numberOfKeys && father->IDs[i] < id)
+    while (i < father->numberOfKeys && father->IDs[i] <= id)
         i++;
     Address leafAddress = father->children[i];
     internalNodeFree(father);
     return leafAddress;
 }
+
+/*
+void printTreeRec(InternalNode *node, int deepness)
+{
+    if (!node->isPointingToLeaf)
+    {
+        InternalNode *son;
+        int i;
+        for (i = 0; i < node->numberOfKeys; i++)
+        {
+            son = internalNodeLoad(node->children[i]);
+            printTreeRec(son, deepness + 1);
+            internalNodeFree(son);
+            for (int j = 0; j <= deepness; j++)
+                printf("    ");
+            printf("%d\n", node->IDs[i]);
+        }
+        son = internalNodeLoad(node->children[i]);
+        printTreeRec(son, deepness + 1);
+        internalNodeFree(son);
+    }
+    else
+    {
+        int i;
+        LeafNode *son;
+        for (i = 0; i < node->numberOfKeys; i++)
+        {
+            son = leafNodeLoad(node->children[i]);
+
+            for (int j = 0; j < son->numberOfKeys; j++)
+            {
+                int id = mainModel.getId(son->info[j]);
+
+                for (int k = 0; k <= deepness + 1; k++)
+                    printf("    ");
+                printf("%d\n", id);
+            }
+            leafNodeFree(son);
+
+            for (i = 0; i < node->numberOfKeys; i++)
+            {
+                for (int j = 0; j <= deepness; j++)
+                    printf("    ");
+                printf("%d\n", node->IDs[i]);
+            }
+
+            son = leafNodeLoad(node->children[i+1]);
+
+            for (int j = 0; j < son->numberOfKeys; j++)
+            {
+                int id = mainModel.getId(son->info[j]);
+
+                for (int k = 0; k <= deepness + 1; k++)
+                    printf("    ");
+                printf("%d\n", id);
+            }
+        }
+    }
+    internalNodeFree(node);
+}
+
+void printTree(void)
+{
+    printf("\n\n\n");
+    if (meta->rootIsLeaf)
+    {
+        LeafNode *root = leafNodeLoad(meta->rootPosition);
+        for (int i = 0; i < root->numberOfKeys; i++)
+        {
+            int id = mainModel.getId(root->info[i]);
+            printf("%d\n", id);
+        }
+        leafNodeFree(root);
+        printf("\n\n\n");
+        return;
+    }
+
+    InternalNode *root = internalNodeLoad(meta->rootPosition);
+    printTreeRec(root, 0); // This function is going to free the memory.
+    printf("\n\n\n");
+}
+*/

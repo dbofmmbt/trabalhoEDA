@@ -56,25 +56,21 @@ int main(int argc, char const *argv[])
         {
         case 1: //Adicionar pizza
         {
+            /*
             char namePizza[100];
             char categoryPizza[100];
             float pricePizza;
-
             printf("Nome: ");
             scanf("%s", namePizza);
             printf("Categoria: ");
             scanf("%s", categoryPizza);
             printf("Preco: ");
-            do
-            {
-                scanf("%f", &pricePizza);
-                if (pricePizza < 0.0)
-                    printf("O valor da pizza nao pode ser negativo.\nDigite um novo valor: ");
-
-            } while (pricePizza < 0.0);
-
+            scanf("%f", &pricePizza);
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+             */
+            Pizza *p = pizzaCreate(0, "adawdawda", "adaw", 1.0);
             insertOnTree(p);
+            forEachInfo(mainView.infoPrint);
             break;
         }
         case 3: //Alterar pizza
@@ -91,15 +87,8 @@ int main(int argc, char const *argv[])
             printf("Nova Categoria: ");
             scanf("%s", categoryPizza);
             printf("Novo Preco: ");
-            do
-            {
-                scanf("%f", &pricePizza);
-                if (pricePizza < 0.0)
-                    printf("O valor da pizza nao pode ser negativo.\nDigite um novo valor: ");
-
-            } while (pricePizza < 0.0);
-
-            Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+            scanf("%f", &pricePizza);
+            Pizza *p = pizzaCreate(IDPizza, namePizza, categoryPizza, pricePizza);
             updateOnTree(p);
             break;
         }

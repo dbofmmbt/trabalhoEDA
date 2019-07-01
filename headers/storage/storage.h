@@ -26,4 +26,6 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex);
 
 void *removeAllFromSecIndex(void *secIndex);
 
+void printTree(void);
+
 #endif
