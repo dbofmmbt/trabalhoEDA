@@ -601,19 +601,16 @@ void printTree(void)
 */
 void printTree()
 {
-    if(!meta->quantityInfos){
+    if (!meta->quantityInfos)
+    {
         return;
     }
-    else if (meta->rootIsLeaf)
+    if (!meta->rootIsLeaf)
     {
         treeWidthPrint();
     }
-    else
-    {
-        printLeafNodes();
-    }
-
-    //printLeafNodes(root);
+    printf("\n");
+    printLeafNodes();
 }
 
 typedef struct addressList
@@ -659,35 +656,36 @@ void treeWidthPrint()
 
         AddressList *aux = list;
         list = list->next;
-        if (aux->deepness != list->deepness)
+
+        if (list && (aux->deepness != list->deepness))
             printf("\n");
         free(aux);
-        free(node);
+        internalNodeFree(node);
     }
-    free(list);
 }
 
 void printLeafNodes()
 {
-    InternalNode *root = loadRoot();
-    InternalNode *aux;
-    while (!root->isPointingToLeaf)
-    {
-        aux = root;
-        internalNodeFree(root);
-        root = internalNodeLoad(aux->children[0]);
-    }
-    LeafNode *current_leaf = leafNodeLoad(root->children[0]);
-    internalNodeFree(root);
-    while (current_leaf->next != -1)
+    LeafNode *current_leaf = leafNodeLoad(getPossibleLeafAddress(0));
+
+    LeafNode *aux;
+    while (current_leaf)
     {
         printf("| ");
-        for (int i = 0; i <= current_leaf->numberOfKeys; i++)
+        for (int i = 0; i < current_leaf->numberOfKeys; i++)
         {
+            printf("-");
             printf("%i", mainModel.getId(current_leaf->info[i]));
+            printf("-");
         }
         printf(" |");
+        aux = current_leaf;
+        if (current_leaf->next != -1)
+            current_leaf = leafNodeLoad(current_leaf->next);
+        else
+            current_leaf = NULL;
+        leafNodeFree(aux);
     }
-    internalNodeFree(root);
+    printf("\n");
     return;
 }

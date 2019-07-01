@@ -140,7 +140,11 @@ int main(int argc, char const *argv[])
             printAllFromSecIndex(pizzaPrint, secIndex);
             break;
         }
-
+        case 10:
+            {   
+                printTree();
+                break;
+            }
         default:
             break;
         }

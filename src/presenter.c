@@ -37,6 +37,7 @@ static int showSubMenu(int option)
             {
                 return answer + 4;
             }
+            
             printf("Escolha uma opcao valida no menu.\n");
             break;
 
@@ -125,7 +126,11 @@ int showMenu(void)
             answer = showSubMenu(answer);
             if (answer)
                 return answer;
-        } else {
+        }
+        else if(answer == 5){
+            return answer*2;
+        }
+        else {
             printf("Escolha uma opcao valida no menu.\n");
         }
     }
