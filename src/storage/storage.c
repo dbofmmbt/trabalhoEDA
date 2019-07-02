@@ -358,7 +358,6 @@ static Address getPossibleLeafAddress(int id, int action)
             leafNodeDivision(newRootAddress, 0);
             meta->rootPosition = newRootAddress;
             meta->rootIsLeaf = false;
-            meta->idCounter--;
             storeMetadata();
             leafNodeFree(root);
             internalNodeFree(newRoot);
