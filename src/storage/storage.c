@@ -294,58 +294,38 @@ static Address getPossibleFatherAddress(int id, int action)
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
 
-        if (action == POST)
+        if (action == POST && son->numberOfKeys == 2 * branchingFactor - 1)
         {
-            if (son->numberOfKeys == 2 * branchingFactor - 1)
-            {
-                internalNodeDivision(fatherAddress, i);
-            }
-            else // If the son doesn't need operations, continue the search down the Tree.
-            {
-                internalNodeFree(father);
-                father = son;
-                fatherAddress = sonAddress;
-                continue;
-            }
+            internalNodeDivision(fatherAddress, i);
         }
-        else if (action == DELETE)
+        else if (action == DELETE && son->numberOfKeys == branchingFactor - 1)
         {
-            if (son->numberOfKeys == branchingFactor - 1)
-            {
-                bool operated = false;
+            bool operated = false;
 
-                if (i < father->numberOfKeys)
-                {
-                    InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
-                    if (rightBrother->numberOfKeys >= branchingFactor)
-                    {
-                        operation3A(fatherAddress, i);
-                        operated = true;
-                    }
-                    internalNodeFree(rightBrother);
-                }
-                if (i > 0 && !operated)
-                {
-                    InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
-                    if (leftBrother->numberOfKeys >= branchingFactor)
-                    {
-                        operation3A(fatherAddress, i);
-                        operated = true;
-                    }
-                    internalNodeFree(leftBrother);
-                }
-                if (!operated)
-                    operation3B(fatherAddress, i);
-            }
-            else // If the son doesn't need operations, continue the search down the Tree.
+            if (i < father->numberOfKeys)
             {
-                internalNodeFree(father);
-                father = son;
-                fatherAddress = sonAddress;
-                continue;
+                InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(rightBrother);
             }
+            if (i > 0 && !operated)
+            {
+                InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                internalNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
         }
-        else if (action == GET)
+        else // If the son doesn't need operations, continue the search down the Tree.
         {
             internalNodeFree(father);
             father = son;
@@ -400,56 +380,38 @@ static Address getPossibleLeafAddress(int id, int action)
         leafAddress = father->children[i];
         leaf = leafNodeLoad(leafAddress);
 
-        if (action == POST)
+        if (action == POST && leaf->numberOfKeys == 2 * branchingFactor - 1)
         {
-            if (leaf->numberOfKeys == 2 * branchingFactor - 1)
-            {
-                leafNodeDivision(fatherAddress, i);
-            }
-            else // Happens when no division was necessary.
-            {
-                internalNodeFree(father);
-                shouldFixTree = false;
-                continue;
-            }
+            leafNodeDivision(fatherAddress, i);
         }
-        else if (action == DELETE)
+        else if (action == DELETE && leaf->numberOfKeys == branchingFactor - 1)
         {
-            if (leaf->numberOfKeys == branchingFactor - 1)
-            {
-                bool operated = false;
+            bool operated = false;
 
-                if (i < father->numberOfKeys)
-                {
-                    LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
-                    if (rightBrother->numberOfKeys >= branchingFactor)
-                    {
-                        operation3A(fatherAddress, i);
-                        operated = true;
-                    }
-                    leafNodeFree(rightBrother);
-                }
-                if (i > 0 && !operated)
-                {
-                    LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
-                    if (leftBrother->numberOfKeys >= branchingFactor)
-                    {
-                        operation3A(fatherAddress, i);
-                        operated = true;
-                    }
-                    leafNodeFree(leftBrother);
-                }
-                if (!operated)
-                    operation3B(fatherAddress, i);
-            }
-            else // Happens when no division nor operation was necessary.
+            if (i < father->numberOfKeys)
             {
-                internalNodeFree(father);
-                shouldFixTree = false;
-                continue;
+                LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
+                if (rightBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(rightBrother);
             }
+            if (i > 0 && !operated)
+            {
+                LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
+                if (leftBrother->numberOfKeys >= branchingFactor)
+                {
+                    operation3A(fatherAddress, i);
+                    operated = true;
+                }
+                leafNodeFree(leftBrother);
+            }
+            if (!operated)
+                operation3B(fatherAddress, i);
         }
-        else if (action == GET)
+        else // Happens when no division nor operation was necessary.
         {
             internalNodeFree(father);
             shouldFixTree = false;
