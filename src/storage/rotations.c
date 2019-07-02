@@ -109,7 +109,7 @@ void leafNodeoperation3A(Address father, int sonPosition)
    if (node->numberOfKeys > (branchingFactor - 1))
       return;
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    //se o irmão a direita existir, vê se ele tem + que t chaves
@@ -126,13 +126,13 @@ void leafNodeoperation3A(Address father, int sonPosition)
          node->numberOfKeys++;
 
          //tira primeiro filho do irmão a direita e anda com as outras infos pra esquerda (tapando o buraco)
-         for (int i = 1; i < nodeRightBrother->numberOfKeys; i++)
-            nodeRightBrother->info[i - 1] = nodeRightBrother->info[i];
+         for (int i = 0; i < nodeRightBrother->numberOfKeys - 1; i++)
+            nodeRightBrother->info[i] = nodeRightBrother->info[i + 1];
          //decrementa numero de chaves do irmão a direita
          nodeRightBrother->numberOfKeys--;
          //pega o id do primeiro filho do irmão da direita e poe no pai
          int newFatherID = mainModel.getId((nodeRightBrother->info[0]));
-         nodeFather->IDs[sonPosition + 1] = newFatherID;
+         nodeFather->IDs[sonPosition] = newFatherID;
       }
 
       leafNodeStore(nodeRightBrother, rightBrother);
@@ -157,7 +157,7 @@ void leafNodeoperation3A(Address father, int sonPosition)
          nodeLeftBrother->numberOfKeys--;
          //pegar o id do primeiro filho do nó e colocar no pai
          int newFatherID = mainModel.getId((node->info[0]));
-         nodeFather->IDs[sonPosition] = newFatherID;
+         nodeFather->IDs[sonPosition - 1] = newFatherID;
       }
 
       leafNodeStore(nodeLeftBrother, leftBrother);
@@ -185,7 +185,7 @@ void internalNodeoperation3A(Address father, int sonPosition)
    if (node->numberOfKeys > (branchingFactor - 1))
       return;
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)
@@ -294,7 +294,7 @@ void rootOperation3B(Address father, int sonPosition)
    if (root->isPointingToLeaf)
    {
       LeafNode *son = leafNodeLoad(root->children[sonPosition]);
-      if (sonPosition < root->numberOfKeys - 1) // Join with right brother
+      if (sonPosition < root->numberOfKeys) // Join with right brother
       {
          int i;
          LeafNode *rightBrother = leafNodeLoad(root->children[sonPosition + 1]);
@@ -358,7 +358,7 @@ void rootOperation3B(Address father, int sonPosition)
    else // Root points to Internal Node
    {
       InternalNode *son = internalNodeLoad(root->children[sonPosition]);
-      if (sonPosition < root->numberOfKeys - 1) // Join with the right brother
+      if (sonPosition < root->numberOfKeys) // Join with the right brother
       {
          int i;
          InternalNode *rightBrother = internalNodeLoad(root->children[sonPosition + 1]);
@@ -443,7 +443,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
    Address sonAddress = nodeFather->children[sonPosition];
    node = leafNodeLoad(sonAddress);
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)
@@ -512,7 +512,7 @@ void internalNodeoperation3B(Address father, int sonPosition)
    Address sonAddress = nodeFather->children[sonPosition];
    node = internalNodeLoad(sonAddress);
 
-   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys - 1));
+   bool nodeHasRightBrother = (sonPosition < (nodeFather->numberOfKeys));
    bool nodeHasLeftBrother = (sonPosition > 0);
 
    if (nodeHasRightBrother)

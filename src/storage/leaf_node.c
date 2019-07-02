@@ -37,8 +37,7 @@ Address leafNodeStore(LeafNode *node, Address pos)
     }
 
     int maxNumberKeys = branchingFactor * 2 - 1;
-    char c = '0';
-    fwrite(&c, sizeof(char), mainModel.infoSize() * (maxNumberKeys - i), f);
+    fseek(f, mainModel.infoSize() * (maxNumberKeys - i), SEEK_CUR);
 
     fwrite(&node->next, sizeof(int), 1, f);
     fclose(f);
