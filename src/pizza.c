@@ -17,7 +17,6 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 	strcpy(p->name, name);
 	strcpy(p->category, category);
 	p->price = price;
-	p->nextCategoryElement = -1;
 	return p;
 }
 
@@ -30,7 +29,6 @@ void pizzaSave(void *v, FILE *out)
 	fwrite(p->name, sizeof(char), sizeof(p->name), out);
 	fwrite(p->category, sizeof(char), sizeof(p->category), out);
 	fwrite(&p->price, sizeof(float), 1, out);
-	fwrite(&p->nextCategoryElement, sizeof(int), 1, out);
 }
 
 void *pizzaRead(FILE *in)
@@ -38,7 +36,7 @@ void *pizzaRead(FILE *in)
 	Pizza *p = (Pizza *)malloc(sizeof(Pizza));
 	if (!p)
 		return p;
-	if (0 >= fread(&p->id, sizeof(int), 1, in))
+	if (!fread(&p->id, sizeof(int), 1, in))
 	{
 		free(p);
 		return NULL;
@@ -46,7 +44,6 @@ void *pizzaRead(FILE *in)
 	fread(p->name, sizeof(char), sizeof(p->name), in);
 	fread(p->category, sizeof(char), sizeof(p->category), in);
 	fread(&p->price, sizeof(float), 1, in);
-	fread(&p->nextCategoryElement, sizeof(int), 1, in);
 	return (void *)p;
 }
 
@@ -80,8 +77,7 @@ int pizzaSize(void)
 	return sizeof(int) +	   // id
 		   sizeof(char) * 50 + // name
 		   sizeof(char) * 20 + // categoria
-		   sizeof(float) +	 // preço
-		   sizeof(int);		   // nextimoElementoCategoria
+		   sizeof(float);	  // preço
 }
 
 void pizzaFree(void *p)
@@ -106,18 +102,6 @@ void *pizzaCategory(void *v)
 {
 	Pizza *p = (Pizza *)v;
 	return (void *)(p->category);
-}
-
-int getNextCategoryPosition(void *v)
-{
-	Pizza *p = (Pizza *)v;
-	return p->nextCategoryElement;
-}
-
-void setNextCategoryPosition(void *v, int position)
-{
-	Pizza *p = (Pizza *)v;
-	p->nextCategoryElement = position;
 }
 
 char *pizzaName(bool plural)

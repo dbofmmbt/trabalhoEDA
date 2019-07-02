@@ -19,9 +19,6 @@ typedef struct infoModel
 
     void *(*getSecIndex)(void *info);
 
-    int (*getNextSecIndexPosition)(void *info);
-
-    void (*setNextSecIndexPosition)(void *info, int position);
 } InfoModel;
 
 #endif

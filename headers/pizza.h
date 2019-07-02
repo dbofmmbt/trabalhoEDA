@@ -9,8 +9,7 @@ typedef struct pizza
 	char name[50];
 	char category[20];
 	float price;
-	int nextCategoryElement;
-}Pizza;
+} Pizza;
 
 /* When nextCategoryElement is -1, it means that there's no next element */
 
@@ -42,10 +41,6 @@ int pizzaGetId(void *p);
 void pizzaSetId(void *p, int id);
 
 void *pizzaCategory(void *p);
-
-int getNextCategoryPosition(void *p);
-
-void setNextCategoryPosition(void *p, int position);
 
 char *pizzaName(bool plural);
 

@@ -18,9 +18,7 @@ InfoModel mainModel = {
     pizzaFree,
     pizzaGetId,
     pizzaSetId,
-    pizzaCategory,
-    getNextCategoryPosition,
-    setNextCategoryPosition};
+    pizzaCategory};
 
 InfoView mainView = {
     pizzaPrint,
@@ -87,7 +85,7 @@ int main(int argc, char const *argv[])
                 }
 
             } while (pricePizza < 0.0);
-            
+
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
             insertOnTree(p);
             forEachInfo(mainView.infoPrint);
