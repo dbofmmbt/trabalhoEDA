@@ -280,7 +280,6 @@ static Address getPossibleFatherAddress(int id, int action)
         Address newRootAddress = internalNodeStore(newRoot, -1);
         internalNodeDivision(newRootAddress, 0);
         meta->rootPosition = newRootAddress;
-        meta->idCounter--;
         storeMetadata();
         internalNodeFree(father);
         internalNodeFree(newRoot);
