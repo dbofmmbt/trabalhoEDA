@@ -54,6 +54,20 @@ int main(int argc, char const *argv[])
     {
         switch (menuAnswer)
         {
+        case 0:
+        {
+            int x;
+            printf("Adicionar quantos elementos? ");
+            scanf("%d", &x);
+            for (int i = 0; i < x; i++)
+            {
+                Pizza *p = pizzaCreate(0, "namePizza", "categoryPizza", 10.0);
+                insertOnTree(p);
+            }
+
+            forEachInfo(mainView.infoPrint);
+            break;
+        }
         case 1: //Adicionar pizza
         {
             char namePizza[100];
@@ -63,8 +77,17 @@ int main(int argc, char const *argv[])
             scanf("%s", namePizza);
             printf("Categoria: ");
             scanf("%s", categoryPizza);
-            printf("Preco: ");
-            scanf("%f", &pricePizza);
+            do
+            {
+                printf("Preco: ");
+                scanf("%f", &pricePizza);
+                if (pricePizza < 0.0)
+                {
+                    printf("O valor da pizza deve ser positivo.\n");
+                }
+
+            } while (pricePizza < 0.0);
+            
             Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
             insertOnTree(p);
             forEachInfo(mainView.infoPrint);
@@ -83,8 +106,17 @@ int main(int argc, char const *argv[])
             scanf("%s", namePizza);
             printf("Nova Categoria: ");
             scanf("%s", categoryPizza);
-            printf("Novo Preco: ");
-            scanf("%f", &pricePizza);
+            do
+            {
+                printf("Novo Preco: ");
+                scanf("%f", &pricePizza);
+                if (pricePizza < 0.0)
+                {
+                    printf("O valor da pizza deve ser positivo.\n");
+                }
+
+            } while (pricePizza < 0.0);
+
             Pizza *p = pizzaCreate(IDPizza, namePizza, categoryPizza, pricePizza);
             updateOnTree(p);
             break;
@@ -127,7 +159,7 @@ int main(int argc, char const *argv[])
             }
             else
             {
-                printf("O objeto %s não foi encontrado", mainView.infoName(0));
+                printf("O objeto %s não foi encontrado.\n", mainView.infoName(0));
             }
 
             break;
@@ -137,14 +169,18 @@ int main(int argc, char const *argv[])
             char secIndex[100];
             printf("Categoria a ser listada: ");
             scanf("%s", secIndex);
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
+            printf("|                    LISTA                    |\n");
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
             printAllFromSecIndex(pizzaPrint, secIndex);
+            printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
             break;
         }
         case 10:
-            {   
-                printTree();
-                break;
-            }
+        {
+            printTree();
+            break;
+        }
         default:
             break;
         }

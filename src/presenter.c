@@ -117,7 +117,7 @@ int showMenu(void)
         printf("\n");
         printf("R: ");
         scanf("%d", &answer);
-        if (answer == 1 || answer == 3 || answer == 666)
+        if (answer == 1 || answer == 3 || answer == 666 || answer == 0)
         {
             return answer;
         }
