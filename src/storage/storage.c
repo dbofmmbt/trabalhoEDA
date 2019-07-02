@@ -346,6 +346,13 @@ static Address getPossibleFatherAddress(int id, int action)
                 continue;
             }
         }
+        else if (action == GET)
+        {
+            internalNodeFree(father);
+            father = son;
+            fatherAddress = sonAddress;
+            continue;
+        }
         // The son needed operations. Therefore, the father must be accessed again.
         internalNodeFree(son);
         internalNodeFree(father);
@@ -442,6 +449,12 @@ static Address getPossibleLeafAddress(int id, int action)
                 shouldFixTree = false;
                 continue;
             }
+        }
+        else if (action == GET)
+        {
+            internalNodeFree(father);
+            shouldFixTree = false;
+            continue;
         }
         internalNodeFree(father);
         leafNodeFree(leaf);
