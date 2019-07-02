@@ -413,8 +413,9 @@ void *printAllFromSecIndex(void (*callback)(void *), void *secIndex)
         currentNodeAddress = leaf->next;
         leafNodeFree(leaf);
     } while (currentNodeAddress != -1);
-    if (!categoryExist){
-        printf("A categoria %s nao existe.\n", (char *) secIndex);
+    if (!categoryExist)
+    {
+        printf("A categoria %s nao existe.\n", (char *)secIndex);
     }
     return NULL;
 }
@@ -457,7 +458,6 @@ void *removeAllFromSecIndex(void *secIndex)
         ListIDs *tmp = list;
         list = list->next;
         free(tmp);
-
     }
 
     return NULL;
