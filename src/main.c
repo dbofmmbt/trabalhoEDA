@@ -3,27 +3,12 @@
 #include <stdlib.h>
 #include <pizza.h>
 #include <storage.h>
-#include <info_view.h>
-#include <info_model.h>
+#include <interface_init.h>
 #include <presenter.h>
 
 #define UNUSED_PARAMETER(x) ((void)x)
 
 extern Metadata *meta;
-
-InfoModel mainModel = {
-    pizzaSave,
-    pizzaRead,
-    pizzaSize,
-    pizzaFree,
-    pizzaGetId,
-    pizzaSetId,
-    pizzaCategory};
-
-InfoView mainView = {
-    pizzaPrint,
-    pizzaName,
-    showMenu};
 
 void getInitialParamsAndSetStorage(void)
 {
@@ -47,7 +32,7 @@ int main(int argc, char const *argv[])
     getInitialParamsAndSetStorage();
 
     int menuAnswer;
-    menuAnswer = mainView.showMenu();
+    menuAnswer = showMenu();
     while (menuAnswer != 666)
     {
         switch (menuAnswer)
@@ -182,7 +167,7 @@ int main(int argc, char const *argv[])
         default:
             break;
         }
-        menuAnswer = mainView.showMenu();
+        menuAnswer = showMenu();
     }
     printf("Fim do programa!\nSeja feliz! :)\nComa pizza!\n");
     return 0;

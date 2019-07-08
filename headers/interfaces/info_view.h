@@ -8,8 +8,6 @@ typedef struct infoView
     void (*infoPrint)(void *info);
 
     char *(*infoName)(bool plural);
-
-    int (*showMenu)(void);
 } InfoView;
 
 #endif
