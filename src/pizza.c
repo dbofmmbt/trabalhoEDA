@@ -26,9 +26,9 @@ void *getPizzaFromUser(void)
 	char categoryPizza[100];
 	float pricePizza;
 	printf("Nome: ");
-	scanf("%s", namePizza);
+	scanf(" %[^\n]", namePizza);
 	printf("Categoria: ");
-	scanf("%s", categoryPizza);
+	scanf(" %[^\n]", categoryPizza);
 	do
 	{
 		printf("Preco: ");
