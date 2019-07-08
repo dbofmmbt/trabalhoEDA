@@ -304,6 +304,7 @@ void rootOperation3B(Address father, int sonPosition)
          }
          son->next = rightBrother->next;
          son->numberOfKeys += rightBrother->numberOfKeys;
+         rightBrother->numberOfKeys = 0;
 
          for (i = sonPosition; i < root->numberOfKeys - 1; i++)
          {
@@ -330,6 +331,7 @@ void rootOperation3B(Address father, int sonPosition)
             root->children[i + 1] = root->children[i + 2];
          }
          sonPosition--;
+         son->numberOfKeys = 0;
          root->numberOfKeys--;
          // The son became the leftBrother.
          LeafNode *aux = son;
@@ -351,6 +353,7 @@ void rootOperation3B(Address father, int sonPosition)
          meta->rootPosition = root->children[0];
          meta->rootIsLeaf = true;
          storeMetadata();
+         internalNodeStore(root, father);
          internalNodeFree(root);
          root = NULL;
       }
@@ -420,6 +423,7 @@ void rootOperation3B(Address father, int sonPosition)
       {
          meta->rootPosition = root->children[0];
          storeMetadata();
+         internalNodeStore(root, father);
          internalNodeFree(root);
          root = NULL;
       }
@@ -496,6 +500,7 @@ void leafNodeoperation3B(Address father, int sonPosition)
          nodeFather->numberOfKeys--;
       }
       leafNodeStore(nodeLeftBrother, leftBrother);
+      leafNodeStore(node, sonAddress);
       leafNodeFree(nodeLeftBrother);
       leafNodeFree(node);
       node = NULL;
