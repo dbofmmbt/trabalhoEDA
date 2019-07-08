@@ -16,7 +16,4 @@
  */
 int showMenu(void);
 
-/* It uses the InfoPrint from mainView */
-void showInfo(void);
-
 #endif

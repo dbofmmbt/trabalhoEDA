@@ -10,7 +10,10 @@
         "info_model.h": "c",
         "unordered_map": "c",
         "utils.h": "c",
-        "rotations.h": "c"
+        "rotations.h": "c",
+        "interface_init.h": "c",
+        "movie.h": "c",
+        "presenter.h": "c"
     },
     "C_Cpp.default.compilerPath": "usr/bin/gcc -fms-extensions",
 }

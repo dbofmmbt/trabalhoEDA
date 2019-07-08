@@ -22,7 +22,7 @@ static int showSubMenu(int option)
                 printf("#");
             printf("\n");
             printf("# [1] Remover por ID    #\n");
-            printf("# [2] Remover categoria #\n");
+            printf("# [2] Remover %s #\n", mainView.infoSecIndexName(0));
             printf("# [666] Voltar          #\n");
             for (int i = 0; i < menuWidth; i++)
                 printf("#");
@@ -49,9 +49,9 @@ static int showSubMenu(int option)
             for (int i = 0; i < menuWidth; i++)
                 printf("#");
             printf("\n");
-            printf("# [1] Listar todas      #\n");
+            printf("# [1] Listar tudo      #\n");
             printf("# [2] Buscar por ID     #\n");
-            printf("# [3] Listar categoria  #\n");
+            printf("# [3] Listar %s  #\n", mainView.infoSecIndexName(0));
             printf("# [666] Voltar          #\n");
             for (int i = 0; i < menuWidth; i++)
                 printf("#");
@@ -136,6 +136,4 @@ int showMenu(void)
     }
 }
 
-void showInfo(void)
-{
-}
+
