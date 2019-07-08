@@ -1,7 +1,7 @@
 #include <storage.h>
 #include <stdarg.h>
 
-extern int branchingFactor;
+
 extern Metadata *meta;
 extern InfoModel mainModel;
 
@@ -21,7 +21,6 @@ void printLeafNodes();
 
 void setupStorage(char *catalogName, int degree)
 {
-    branchingFactor = degree;
     FILE *f = fopen(METADATA_FILE_PATH, "rb");
     if (f) // If it exists, there's no need to setup the Store.
     {
@@ -272,7 +271,7 @@ static Address getPossibleFatherAddress(int id, int action)
     InternalNode *father = loadRoot();
     Address fatherAddress = meta->rootPosition;
 
-    if (action == POST && father->numberOfKeys == 2 * branchingFactor - 1)
+    if (action == POST && father->numberOfKeys == 2 * meta->branchingFactor - 1)
     {
         InternalNode *newRoot = internalNodeCreate();
         newRoot->isPointingToLeaf = false;
@@ -294,18 +293,18 @@ static Address getPossibleFatherAddress(int id, int action)
         Address sonAddress = father->children[i];
         InternalNode *son = internalNodeLoad(sonAddress);
 
-        if (action == POST && son->numberOfKeys == 2 * branchingFactor - 1)
+        if (action == POST && son->numberOfKeys == 2 * meta->branchingFactor - 1)
         {
             internalNodeDivision(fatherAddress, i);
         }
-        else if (action == DELETE && son->numberOfKeys == branchingFactor - 1)
+        else if (action == DELETE && son->numberOfKeys == meta->branchingFactor - 1)
         {
             bool operated = false;
 
             if (i < father->numberOfKeys)
             {
                 InternalNode *rightBrother = internalNodeLoad(father->children[i + 1]);
-                if (rightBrother->numberOfKeys >= branchingFactor)
+                if (rightBrother->numberOfKeys >= meta->branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;
@@ -315,7 +314,7 @@ static Address getPossibleFatherAddress(int id, int action)
             if (i > 0 && !operated)
             {
                 InternalNode *leftBrother = internalNodeLoad(father->children[i - 1]);
-                if (leftBrother->numberOfKeys >= branchingFactor)
+                if (leftBrother->numberOfKeys >= meta->branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;
@@ -349,7 +348,7 @@ static Address getPossibleLeafAddress(int id, int action)
     if (fatherAddress == -1) // Treating the case where the root is a Leaf.
     {
         LeafNode *root = leafNodeLoad(meta->rootPosition);
-        if (action == POST && root->numberOfKeys == 2 * branchingFactor - 1)
+        if (action == POST && root->numberOfKeys == 2 * meta->branchingFactor - 1)
         {
             InternalNode *newRoot = internalNodeCreate();
             newRoot->isPointingToLeaf = true;
@@ -379,18 +378,18 @@ static Address getPossibleLeafAddress(int id, int action)
         leafAddress = father->children[i];
         leaf = leafNodeLoad(leafAddress);
 
-        if (action == POST && leaf->numberOfKeys == 2 * branchingFactor - 1)
+        if (action == POST && leaf->numberOfKeys == 2 * meta->branchingFactor - 1)
         {
             leafNodeDivision(fatherAddress, i);
         }
-        else if (action == DELETE && leaf->numberOfKeys == branchingFactor - 1)
+        else if (action == DELETE && leaf->numberOfKeys == meta->branchingFactor - 1)
         {
             bool operated = false;
 
             if (i < father->numberOfKeys)
             {
                 LeafNode *rightBrother = leafNodeLoad(father->children[i + 1]);
-                if (rightBrother->numberOfKeys >= branchingFactor)
+                if (rightBrother->numberOfKeys >= meta->branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;
@@ -400,7 +399,7 @@ static Address getPossibleLeafAddress(int id, int action)
             if (i > 0 && !operated)
             {
                 LeafNode *leftBrother = leafNodeLoad(father->children[i - 1]);
-                if (leftBrother->numberOfKeys >= branchingFactor)
+                if (leftBrother->numberOfKeys >= meta->branchingFactor)
                 {
                     operation3A(fatherAddress, i);
                     operated = true;
