@@ -8,7 +8,6 @@
 #include <internal_node.h>
 #include <rotations.h>
 
-int branchingFactor; // ? Does it make sense to keep it on metadata?
 
 void setupStorage(char *catalogName, int degree);
 
