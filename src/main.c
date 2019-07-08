@@ -11,6 +11,13 @@ extern Metadata *meta;
 
 void getInitialParamsAndSetStorage(void)
 {
+    FILE *f = fopen(METADATA_FILE_PATH, "rb");
+    if (f) // If it exists, there's no need to setup the Store.
+    {
+        fclose(f);
+        loadMetadata();
+        return;
+    }
     char fileName[100];
     int t = 0;
     printf("Digite o nome do arquivo: ");
