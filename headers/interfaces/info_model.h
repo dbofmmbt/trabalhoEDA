@@ -4,6 +4,9 @@
 /* The Model is responsible for the data abstraction */
 typedef struct infoModel
 {
+    void *(*getInfoFromUser)(void);
+
+    void *(*getSampleInfo)(void);
     /* It should write a record in a given file */
     void (*infoSaver)(void *info, FILE *file);
     /* It should load a record from a given file */

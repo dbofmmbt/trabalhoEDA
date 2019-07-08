@@ -2,6 +2,8 @@
 #include <pizza.h>
 
 InfoModel mainModel = {
+    getPizzaFromUser,
+    getSamplePizza,
     pizzaSave,
     pizzaRead,
     pizzaSize,
@@ -12,4 +14,5 @@ InfoModel mainModel = {
 
 InfoView mainView = {
     pizzaPrint,
-    pizzaName};
+    pizzaName,
+    pizzaSecIndexName};

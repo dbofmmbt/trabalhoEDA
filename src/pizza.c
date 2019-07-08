@@ -20,6 +20,35 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 	return p;
 }
 
+Pizza *getPizzaFromUser(void)
+{
+	char namePizza[100];
+	char categoryPizza[100];
+	float pricePizza;
+	printf("Nome: ");
+	scanf("%s", namePizza);
+	printf("Categoria: ");
+	scanf("%s", categoryPizza);
+	do
+	{
+		printf("Preco: ");
+		scanf("%f", &pricePizza);
+		if (pricePizza < 0.0)
+		{
+			printf("O valor da pizza deve ser positivo.\n");
+		}
+
+	} while (pricePizza < 0.0);
+
+	Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
+	return p;
+}
+
+Pizza *getSamplePizza(void)
+{
+	return pizzaCreate(0, "namePizza", "categoryPizza", 10.0);
+}
+
 void pizzaSave(void *v, FILE *out)
 {
 	if (!v)
@@ -110,4 +139,12 @@ char *pizzaName(bool plural)
 		return "pizzas";
 	else
 		return "pizza";
+}
+
+char *pizzaSecIndexName(bool plural)
+{
+	if (plural)
+		return "categorias";
+	else
+		return "categoria";
 }

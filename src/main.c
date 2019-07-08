@@ -1,7 +1,6 @@
 #include <utils.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pizza.h>
 #include <storage.h>
 #include <interface_init.h>
 #include <presenter.h>
@@ -37,104 +36,73 @@ int main(int argc, char const *argv[])
     {
         switch (menuAnswer)
         {
-        case 0:
+        case 0: // Just for debug purposes
         {
             int x;
             printf("Adicionar quantos elementos? ");
             scanf("%d", &x);
             for (int i = 0; i < x; i++)
             {
-                Pizza *p = pizzaCreate(0, "namePizza", "categoryPizza", 10.0);
-                insertOnTree(p);
+                void *info = mainModel.getSampleInfo();
+                insertOnTree(info);
+                mainModel.infoFree(info);
             }
 
             forEachInfo(mainView.infoPrint);
             break;
         }
-        case 1: //Adicionar pizza
+        case 1: //Adicionar info
         {
-            char namePizza[100];
-            char categoryPizza[100];
-            float pricePizza;
-            printf("Nome: ");
-            scanf("%s", namePizza);
-            printf("Categoria: ");
-            scanf("%s", categoryPizza);
-            do
-            {
-                printf("Preco: ");
-                scanf("%f", &pricePizza);
-                if (pricePizza < 0.0)
-                {
-                    printf("O valor da pizza deve ser positivo.\n");
-                }
-
-            } while (pricePizza < 0.0);
-
-            Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
-            insertOnTree(p);
-            forEachInfo(mainView.infoPrint);
+            void *info = mainModel.getInfoFromUser();
+            insertOnTree(info);
+            mainModel.infoFree(info);
             break;
         }
-        case 3: //Alterar pizza
+        case 3: //Alterar info
         {
-            int IDPizza;
-            char namePizza[100];
-            char categoryPizza[100];
-            float pricePizza;
+            int ID;
+            printf("ID de %s a ser alterada(o): ", mainView.infoName(0));
+            scanf("%d", &ID);
 
-            printf("ID da pizza a ser alterada: ");
-            scanf("%d", &IDPizza);
-            printf("Novo Nome: ");
-            scanf("%s", namePizza);
-            printf("Nova Categoria: ");
-            scanf("%s", categoryPizza);
-            do
-            {
-                printf("Novo Preco: ");
-                scanf("%f", &pricePizza);
-                if (pricePizza < 0.0)
-                {
-                    printf("O valor da pizza deve ser positivo.\n");
-                }
-
-            } while (pricePizza < 0.0);
-
-            Pizza *p = pizzaCreate(IDPizza, namePizza, categoryPizza, pricePizza);
-            updateOnTree(p);
+            void *info = mainModel.getInfoFromUser();
+            mainModel.setId(info, ID);
+            updateOnTree(info);
             break;
         }
-        case 5: //Remover pizza por ID
+        case 5: //Remover info por ID
         {
-            int IDPizza;
-            printf("ID da pizza a ser removida: ");
-            scanf("%d", &IDPizza);
-            removeFromTree(IDPizza);
+            int ID;
+            printf("ID da(o) %s a ser removida(o): ", mainView.infoName(0));
+            scanf("%d", &ID);
+            void *info = removeFromTree(ID);
+            printf("%s removida(o):\n", mainView.infoName(0));
+            mainView.infoPrint(info);
+            mainModel.infoFree(info);
             break;
         }
-        case 6: //Remover categoria e todas as pizza da categoria
+        case 6: //Remover SecIndex
         {
-            char categoryPizza[100];
-            printf("Categoria a ser removida: ");
-            scanf("%s", categoryPizza);
-            removeAllFromSecIndex(categoryPizza);
+            char secIndex[100];
+            printf("%s a ser removida(o): ", mainView.infoSecIndexName(0));
+            scanf("%s", secIndex);
+            removeAllFromSecIndex(secIndex);
             break;
         }
-        case 7: //Listar todas as pizzas
+        case 7: //Listar todas as infos
         {
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
             printf("|                    LISTA                    |\n");
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
-            forEachInfo(pizzaPrint);
+            forEachInfo(mainView.infoPrint);
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
         }
         break;
-        case 8: //Buscar pizza por ID
+        case 8: //Buscar info por ID
         {
-            int IDPizza;
-            printf("ID da pizza a ser buscada: ");
-            scanf("%d", &IDPizza);
-            void *p = getFromTree(IDPizza);
+            int ID;
+            printf("ID da(o) %s a ser buscada(o): ", mainView.infoName(0));
+            scanf("%d", &ID);
+            void *p = getFromTree(ID);
             if (p)
             {
                 mainView.infoPrint(p);
@@ -147,15 +115,15 @@ int main(int argc, char const *argv[])
 
             break;
         }
-        case 9: //Listar pizzas de uma categoria
+        case 9: //Listar infos de uma secIndex
         {
             char secIndex[100];
-            printf("Categoria a ser listada: ");
+            printf("%s a ser listada: ", mainView.infoSecIndexName(0));
             scanf("%s", secIndex);
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
             printf("|                    LISTA                    |\n");
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
-            printAllFromSecIndex(pizzaPrint, secIndex);
+            printAllFromSecIndex(mainView.infoPrint, secIndex);
             printf("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
             break;
         }
@@ -169,6 +137,6 @@ int main(int argc, char const *argv[])
         }
         menuAnswer = showMenu();
     }
-    printf("Fim do programa!\nSeja feliz! :)\nComa pizza!\n");
+    printf("Fim do programa!\nSeja feliz! :)\nComa %s!\n", mainView.infoName(1));
     return 0;
 }

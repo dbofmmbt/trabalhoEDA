@@ -19,6 +19,9 @@ void pizzaPrint(void *p);
 // Cria pizza
 Pizza *pizzaCreate(int id, char *name, char *category, float price);
 
+Pizza *getPizzaFromUser(void);
+
+Pizza *getSamplePizza(void);
 // Salva pizza no arquivo out, na posicao atual do cursor
 void pizzaSave(void *p, FILE *out);
 
@@ -43,5 +46,7 @@ void pizzaSetId(void *p, int id);
 void *pizzaCategory(void *p);
 
 char *pizzaName(bool plural);
+
+char *pizzaSecIndexName(bool plural);
 
 #endif
