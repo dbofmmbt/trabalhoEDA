@@ -19,9 +19,9 @@ void pizzaPrint(void *p);
 // Cria pizza
 Pizza *pizzaCreate(int id, char *name, char *category, float price);
 
-Pizza *getPizzaFromUser(void);
+void *getPizzaFromUser(void);
 
-Pizza *getSamplePizza(void);
+void *getSamplePizza(void);
 // Salva pizza no arquivo out, na posicao atual do cursor
 void pizzaSave(void *p, FILE *out);
 

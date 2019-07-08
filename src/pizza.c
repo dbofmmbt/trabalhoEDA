@@ -20,7 +20,7 @@ Pizza *pizzaCreate(int id, char *name, char *category, float price)
 	return p;
 }
 
-Pizza *getPizzaFromUser(void)
+void *getPizzaFromUser(void)
 {
 	char namePizza[100];
 	char categoryPizza[100];
@@ -41,12 +41,12 @@ Pizza *getPizzaFromUser(void)
 	} while (pricePizza < 0.0);
 
 	Pizza *p = pizzaCreate(0, namePizza, categoryPizza, pricePizza);
-	return p;
+	return (void *)p;
 }
 
-Pizza *getSamplePizza(void)
+void *getSamplePizza(void)
 {
-	return pizzaCreate(0, "namePizza", "categoryPizza", 10.0);
+	return (void *)pizzaCreate(0, "namePizza", "categoryPizza", 10.0);
 }
 
 void pizzaSave(void *v, FILE *out)

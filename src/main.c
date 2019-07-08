@@ -45,7 +45,6 @@ int main(int argc, char const *argv[])
             {
                 void *info = mainModel.getSampleInfo();
                 insertOnTree(info);
-                mainModel.infoFree(info);
             }
 
             forEachInfo(mainView.infoPrint);
@@ -55,7 +54,6 @@ int main(int argc, char const *argv[])
         {
             void *info = mainModel.getInfoFromUser();
             insertOnTree(info);
-            mainModel.infoFree(info);
             break;
         }
         case 3: //Alterar info
